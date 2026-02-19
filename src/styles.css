@@ -43,6 +43,7 @@ body {
   background: var(--dark);
   color: #fff;
   line-height: 1.6;
+  padding-top: 90px;
 }
 
 /* Utilidades Básicas */
