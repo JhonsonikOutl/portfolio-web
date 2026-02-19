@@ -1,0 +1,111 @@
+<!-- Loading -->
+<div *ngIf="loading()" class="loading-container">
+  <div class="loading"></div>
+</div>
+
+<!-- Error -->
+<div *ngIf="error()" class="error-container">
+  <div class="alert-error">
+    <span>{{ error() }}</span>
+  </div>
+</div>
+
+<!-- Experience Section -->
+<section *ngIf="!loading()" class="experience-section">
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="section-title">Experiencia Profesional</h1>
+      <p class="section-subtitle">
+        Mi trayectoria profesional y logros destacados
+      </p>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div *ngFor="let exp of experiences(); let i = index" class="timeline-item">
+        
+        <!-- Timeline Line -->
+        <div class="timeline-line">
+          <div class="timeline-dot" [class.current]="exp.isCurrentJob"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="timeline-content">
+          
+          <!-- Header -->
+          <div class="experience-header">
+            <div class="experience-title-section">
+              <h3 class="experience-position">{{ exp.position }}</h3>
+              <div class="experience-company">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <span>{{ exp.company }}</span>
+              </div>
+            </div>
+            
+            <!-- Current Badge -->
+            <div *ngIf="exp.isCurrentJob" class="current-badge">
+              <span class="pulse-dot"></span>
+              Actual
+            </div>
+          </div>
+
+          <!-- Date & Duration -->
+          <div class="experience-meta">
+            <div class="experience-date">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span>{{ formatDate(exp.startDate) }} - {{ exp.endDate ? formatDate(exp.endDate) : 'Presente' }}</span>
+            </div>
+            <div class="experience-duration">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span>{{ getDuration(exp.startDate, exp.endDate) }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="experience-description">{{ exp.description }}</p>
+
+          <!-- Achievements -->
+          <div *ngIf="exp.achievements && exp.achievements.length > 0" class="experience-achievements">
+            <h4>Logros:</h4>
+            <ul>
+              <li *ngFor="let achievement of exp.achievements">{{ achievement }}</li>
+            </ul>
+          </div>
+
+          <!-- Technologies -->
+          <div *ngIf="exp.technologies && exp.technologies.length > 0" class="experience-technologies">
+            <span *ngFor="let tech of exp.technologies" class="tech-tag">
+              {{ tech }}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="stats-summary">
+  <div class="stat-card">
+    <div class="stat-number">{{ experiences().length }}</div>
+    <div class="stat-label">Posiciones</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">5+</div>
+    <div class="stat-label">Años de Experiencia</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ getCurrentJobsCount() }}</div>
+    <div class="stat-label">{{ getCurrentJobsLabel() }}</div>
+  </div>
+</div>
+  </div>
+</section>

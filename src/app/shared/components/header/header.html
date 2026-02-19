@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand">
+      <span style="color: var(--primary)">&lt;</span>
+      <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">JA</span>
+      <span style="color: var(--primary)">/&gt;</span>
+      <div style="display: flex; flex-direction: column; font-size: 0.9rem;">
+        <span>Jonathan Aldana</span>
+        <span style="font-size: 0.7rem; opacity: 0.6;">Full Stack Developer</span>
+      </div>
+    </a>
+    
+    <ul class="navbar-menu">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-link">Inicio</a></li>
+      <li><a routerLink="/about" routerLinkActive="active" class="navbar-link">Sobre Mí</a></li>
+      <li><a routerLink="/skills" routerLinkActive="active" class="navbar-link">Habilidades</a></li>
+      <li><a routerLink="/experience" routerLinkActive="active" class="navbar-link">Experiencia</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active" class="navbar-link">Proyectos</a></li>
+      <li><a routerLink="/contact" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div style="height: 80px;"></div>

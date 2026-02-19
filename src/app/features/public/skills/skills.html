@@ -1,0 +1,106 @@
+<!-- Loading -->
+<div *ngIf="loading()" class="loading-container">
+  <div class="loading"></div>
+</div>
+
+<!-- Error -->
+<div *ngIf="error()" class="error-container">
+  <div class="alert-error">
+    <span>{{ error() }}</span>
+  </div>
+</div>
+
+<!-- Skills Section -->
+<section *ngIf="!loading()" class="skills-section">
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="section-header">
+      <h1 class="section-title">Habilidades Técnicas</h1>
+      <p class="section-subtitle">
+        Tecnologías y herramientas que domino
+      </p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button 
+        (click)="filterByCategory('all')"
+        [class.active]="selectedCategory() === 'all'"
+        class="filter-btn">
+        Todas
+      </button>
+      <button 
+        *ngFor="let category of categories()"
+        (click)="filterByCategory(category)"
+        [class.active]="selectedCategory() === category"
+        class="filter-btn">
+        {{ category }}
+      </button>
+    </div>
+
+    <!-- Skills by Category (Vista de Todas las Categorías) -->
+    <div *ngIf="selectedCategory() === 'all'" class="categories-container">
+      <div *ngFor="let category of categories()" class="category-section">
+        <h2 class="category-title">{{ category }}</h2>
+        <div class="skills-grid">
+          <div *ngFor="let skill of getSkillsByCategory(category)" class="skill-card">
+            <div class="skill-header">
+              <div class="skill-info">
+                <h3 class="skill-name">{{ skill.name }}</h3>
+                <span class="skill-level">{{ getLevelLabel(skill.level) }}</span>
+              </div>
+              <span class="skill-percentage">{{ skill.level }}%</span>
+            </div>
+            
+            <div class="progress-bar">
+              <div 
+                class="progress-fill" 
+                [style.width.%]="skill.level"
+                [style.background]="getLevelColor(skill.level)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Filtradas por Categoría -->
+    <div *ngIf="selectedCategory() !== 'all'" class="skills-grid-filtered">
+      <div *ngFor="let skill of getFilteredSkills()" class="skill-card">
+        <div class="skill-header">
+          <div class="skill-info">
+            <h3 class="skill-name">{{ skill.name }}</h3>
+            <span class="skill-level">{{ getLevelLabel(skill.level) }}</span>
+          </div>
+          <span class="skill-percentage">{{ skill.level }}%</span>
+        </div>
+        
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [style.width.%]="skill.level"
+            [style.background]="getLevelColor(skill.level)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+      <div class="stat-card">
+        <div class="stat-number">{{ skills().length }}</div>
+        <div class="stat-label">Tecnologías</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ categories().length }}</div>
+        <div class="stat-label">Categorías</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">Años de Experiencia</div>
+      </div>
+    </div>
+
+  </div>
+</section>

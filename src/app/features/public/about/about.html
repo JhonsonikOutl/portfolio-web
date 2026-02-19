@@ -1,0 +1,91 @@
+<!-- Loading -->
+<div *ngIf="loading()" class="loading-container">
+    <div class="loading"></div>
+</div>
+
+<!-- Error -->
+<div *ngIf="error()" class="error-container">
+    <div class="alert-error">
+        <span>{{ error() }}</span>
+    </div>
+</div>
+
+<!-- About Section -->
+<section *ngIf="!loading() && profile()" class="about-section">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="section-header">
+            <h1 class="section-title">Sobre Mí</h1>
+            <p class="section-subtitle">
+                Desarrollador Full Stack apasionado por crear soluciones tecnológicas
+            </p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="about-grid">
+
+            <!-- Image Column -->
+            <div class="about-image">
+                <div class="image-wrapper">
+                    <img [src]="profile()?.photoUrl || 'assets/default-avatar.png'" [alt]="profile()?.fullName" />
+                    <div class="image-overlay"></div>
+                </div>
+            </div>
+
+            <!-- Content Column -->
+            <div class="about-content">
+                <h2 class="about-name">{{ profile()?.fullName }}</h2>
+                <p class="about-title">{{ profile()?.title }}</p>
+
+                <div class="about-bio">
+                    <p>{{ profile()?.bio }}</p>
+                </div>
+
+                <!-- Download CV Button -->
+                <button (click)="downloadCv()" class="btn btn-primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Descargar CV
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div *ngFor="let stat of stats" class="stat-card">
+                <div class="stat-value">{{ stat.value }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
+            </div>
+        </div>
+
+        <!-- Values -->
+        <div class="values-section">
+            <h2 class="values-title">Mis Valores</h2>
+            <div class="values-grid">
+                <div *ngFor="let value of values" class="value-card">
+                    <div class="value-icon">{{ value.icon }}</div>
+                    <h3 class="value-title">{{ value.title }}</h3>
+                    <p class="value-description">{{ value.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>¿Interesado en trabajar juntos?</h2>
+            <p>Estoy disponible para nuevos proyectos y oportunidades laborales</p>
+            <a routerLink="/contact" class="btn btn-primary btn-lg">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Contáctame
+            </a>
+        </div>
+
+    </div>
+</section>
