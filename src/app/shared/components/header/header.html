@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="container">
-    <a routerLink="/" class="navbar-brand">
+    <a routerLink="/" class="navbar-brand" (click)="closeMenu()">
       <span style="color: var(--primary)">&lt;</span>
       <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">JA</span>
       <span style="color: var(--primary)">/&gt;</span>
@@ -10,15 +10,21 @@
       </div>
     </a>
     
-    <ul class="navbar-menu">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="navbar-link">Inicio</a></li>
-      <li><a routerLink="/about" routerLinkActive="active" class="navbar-link">Sobre Mí</a></li>
-      <li><a routerLink="/skills" routerLinkActive="active" class="navbar-link">Habilidades</a></li>
-      <li><a routerLink="/experience" routerLinkActive="active" class="navbar-link">Experiencia</a></li>
-      <li><a routerLink="/projects" routerLinkActive="active" class="navbar-link">Proyectos</a></li>
-      <li><a routerLink="/contact" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Contacto</a></li>
+    <button class="menu-toggle" (click)="toggleMenu()" [class.active]="mobileMenuOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <div class="menu-overlay" [class.active]="mobileMenuOpen" (click)="closeMenu()"></div>
+
+    <ul class="navbar-menu" [class.open]="mobileMenuOpen">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()" class="navbar-link">Inicio</a></li>
+      <li><a routerLink="/about" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Sobre Mí</a></li>
+      <li><a routerLink="/skills" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Habilidades</a></li>
+      <li><a routerLink="/experience" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Experiencia</a></li>
+      <li><a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Proyectos</a></li>
+      <li><a routerLink="/contact" (click)="closeMenu()" class="btn btn-primary">Contacto</a></li>
     </ul>
   </div>
 </nav>
-
-<div style="height: 80px;"></div>
