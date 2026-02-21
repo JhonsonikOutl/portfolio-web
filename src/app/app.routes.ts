@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { AdminLayout } from './features/admin/admin-layout/admin-layout';
 
 export const routes: Routes = [
   // Rutas públicas
@@ -28,15 +29,35 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public/contact/contact').then(m => m.Contact)
   },
 
-  // Rutas admin
+  // Ruta de login (sin layout admin)
   {
     path: 'admin/login',
     loadComponent: () => import('./features/admin/login/login').then(m => m.Login)
   },
+
+  // Rutas admin con layout compartido
   {
-    path: 'admin/dashboard',
-    loadComponent: () => import('./features/admin/dashboard/dashboard').then(m => m.Dashboard),
-    canActivate: [authGuard]
+    path: 'admin',
+    component: AdminLayout,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/admin/dashboard/dashboard').then(m => m.Dashboard)
+      },
+      {
+        path: 'projects',
+        loadComponent: () => import('./features/admin/projects/projects').then(m => m.AdminProjects)
+      },
+      {
+        path: 'projects/new',
+        loadComponent: () => import('./features/admin/projects/project-form/project-form').then(m => m.ProjectForm)
+      },
+      {
+        path: 'projects/edit/:id',
+        loadComponent: () => import('./features/admin/projects/project-form/project-form').then(m => m.ProjectForm)
+      }
+    ]
   },
 
   // Ruta por defecto

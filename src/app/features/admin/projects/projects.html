@@ -1,0 +1,163 @@
+<div class="projects-container">
+  
+  <!-- Success Message -->
+  @if (deleteSuccess()) {
+    <div class="success-toast">
+      ✓ {{ deleteSuccess() }}
+    </div>
+  }
+
+  <!-- Header -->
+  <div class="projects-header">
+    <div class="header-left">
+      <h1>Gestión de Proyectos</h1>
+      <p>Administra tus proyectos del portfolio</p>
+    </div>
+    <div class="header-right">
+      <button class="btn-primary" routerLink="/admin/projects/new">
+        <span>+ Nuevo Proyecto</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando proyectos...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error()) {
+    <div class="error-container">
+      <div class="error-message">
+        {{ error() }}
+      </div>
+      <button class="btn-retry" (click)="loadProjects()">
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- Projects Table -->
+  @if (!loading() && !error()) {
+    
+    <!-- Empty State -->
+    @if (projects().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📁</div>
+        <h3>No hay proyectos</h3>
+        <p>Comienza agregando tu primer proyecto</p>
+        <button class="btn-primary" routerLink="/admin/projects/new">
+          + Crear Proyecto
+        </button>
+      </div>
+    }
+
+    <!-- Table with Data -->
+    @if (projects().length > 0) {
+      <div class="table-container">
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Título</th>
+              <th>Tecnologías</th>
+              <th>Fecha Inicio</th>
+              <th>Destacado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (project of projects(); track project.id) {
+              <tr>
+                
+                <!-- Image -->
+                <td>
+                  @if (project.imageUrl) {
+                    <img [src]="project.imageUrl" [alt]="project.title" class="project-thumbnail">
+                  } @else {
+                    <div class="project-placeholder">📁</div>
+                  }
+                </td>
+
+                <!-- Title -->
+                <td>
+                  <div class="project-title">{{ project.title }}</div>
+                  <div class="project-subtitle">
+                    {{ project.description.length > 60 ? project.description.substring(0, 60) + '...' : project.description }}
+                  </div>
+                </td>
+
+                <!-- Technologies -->
+                <td>
+                  <span class="tech-badge">
+                    {{ getTechnologyIcon(project.technologies) }} {{ getTechnologiesPreview(project.technologies) }}
+                  </span>
+                  @if (project.technologies.length > 3) {
+                    <span class="tech-more">+{{ project.technologies.length - 3 }}</span>
+                  }
+                </td>
+
+                <!-- Date -->
+                <td>
+                  <span class="project-date">{{ formatDate(project.startDate) }}</span>
+                </td>
+
+                <!-- Featured -->
+                <td>
+                  @if (project.isFeatured) {
+                    <span class="badge-featured">⭐ Destacado</span>
+                  } @else {
+                    <span class="badge-normal">-</span>
+                  }
+                </td>
+
+                <!-- Actions -->
+                <td>
+                  <div class="actions-group">
+                    <button 
+                      class="btn-action btn-edit" 
+                      title="Editar"
+                      [routerLink]="['/admin/projects/edit', project.id]"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      class="btn-action btn-delete" 
+                      title="Eliminar"
+                      (click)="deleteProject(project)"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="table-footer">
+        <p>Total: {{ projects().length }} proyectos</p>
+      </div>
+    }
+
+  }
+
+  <!-- Confirm Delete Modal -->
+  <app-confirm-dialog
+    [isOpen]="showDeleteModal()"
+    [title]="'¿Eliminar proyecto?'"
+    [message]="deleteMessage"
+    [confirmText]="'Eliminar'"
+    [cancelText]="'Cancelar'"
+    [type]="'danger'"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"
+  ></app-confirm-dialog>
+
+</div>

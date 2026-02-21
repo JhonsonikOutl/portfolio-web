@@ -1,27 +1,20 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuthResponse } from '../../../shared/models/auth.model';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  templateUrl: './admin-layout.html',
+  styleUrl: './admin-layout.css'
 })
-export class Dashboard implements OnInit {
+export class AdminLayout implements OnInit {
   user = signal<AuthResponse | null>(null);
   showMobileMenu = signal(false);
   isAuthenticated = signal(false);
-
-  stats = signal({
-    projects: 0,
-    skills: 0,
-    experiences: 0,
-    messages: 0
-  });
 
   constructor(
     private authService: AuthService,
@@ -29,48 +22,28 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Obtener datos del usuario
     const userData = this.authService.getUser();
     if (userData) {
       this.user.set(userData);
     }
 
-    // Estadísticas (placeholder)
-    this.stats.set({
-      projects: 5,
-      skills: 12,
-      experiences: 3,
-      messages: 8
-    });
-
-    // Check inicial de autenticación
     this.checkAuth();
 
-    // Suscribirse a cambios de autenticación
     this.authService.isAuthenticated$.subscribe(auth => {
       this.isAuthenticated.set(auth);
     });
   }
 
-  /**
-   * Verificar estado de autenticación
-   */
   checkAuth(): void {
     this.isAuthenticated.set(this.authService.isAuthenticated());
   }
 
-  /**
-   * Cerrar sesión
-   */
   logout(): void {
     this.authService.logout();
     this.isAuthenticated.set(false);
     this.router.navigate(['/admin/login']);
   }
 
-  /**
-   * Toggle menú móvil
-   */
   toggleMobileMenu(): void {
     this.showMobileMenu.set(!this.showMobileMenu());
   }

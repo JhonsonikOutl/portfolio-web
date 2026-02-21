@@ -1,0 +1,51 @@
+@if (isOpen) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-content">
+      
+      <!-- Icon -->
+      <div class="modal-icon" [class]="'icon-' + type">
+        @if (type === 'danger') {
+          <span>🗑️</span>
+        }
+        @if (type === 'warning') {
+          <span>⚠️</span>
+        }
+        @if (type === 'info') {
+          <span>ℹ️</span>
+        }
+      </div>
+
+      <!-- Title -->
+      <h3 class="modal-title">{{ title }}</h3>
+
+      <!-- Message -->
+      <p class="modal-message">{{ message }}</p>
+
+      <!-- Actions -->
+      <div class="modal-actions">
+        <button 
+          class="btn btn-cancel" 
+          (click)="onCancel()"
+          [disabled]="processing()"
+        >
+          {{ cancelText }}
+        </button>
+        
+        <button 
+          class="btn btn-confirm" 
+          [class]="'btn-' + type"
+          (click)="onConfirm()"
+          [disabled]="processing()"
+        >
+          @if (processing()) {
+            <span class="btn-spinner"></span>
+            <span>Procesando...</span>
+          } @else {
+            <span>{{ confirmText }}</span>
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
