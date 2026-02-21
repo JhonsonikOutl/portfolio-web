@@ -61,7 +61,7 @@ export class Login implements OnInit {
       error: (err) => {
         // Login fallido
         this.loading.set(false);
-        this.error.set('Email o contraseña incorrectos');
+        this.error.set('Usuario o contraseña incorrectos');
         console.error('Login error:', err);
       }
     });
