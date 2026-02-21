@@ -1,26 +1,34 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login {
-  username = signal('');
-  password = signal('');
-  loading = signal(false);
-  error = signal<string | null>(null);
+export class Login implements OnInit {
+  // Signals - Estado reactivo de Angular
+  username = signal('');        // Username ingresado por el usuario
+  password = signal('');        // Contraseña ingresada
+  loading = signal(false);      // Indica si está procesando el login
+  error = signal<string | null>(null);  // Mensaje de error si falla
 
   constructor(
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService,  // Servicio que maneja la autenticación
+    private router: Router              // Para redirigir después del login
   ) {}
+
+  ngOnInit(): void {
+    // Si ya está autenticado, redirigir al dashboard
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/admin/dashboard']);
+    }
+  }
 
   /**
    * Se ejecuta cuando el usuario envía el formulario
@@ -53,7 +61,7 @@ export class Login {
       error: (err) => {
         // Login fallido
         this.loading.set(false);
-        this.error.set('Usuario o contraseña incorrectos');
+        this.error.set('Email o contraseña incorrectos');
         console.error('Login error:', err);
       }
     });

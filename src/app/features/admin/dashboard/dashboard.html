@@ -13,12 +13,15 @@
       @if (user()) {
         <div class="user-info">
           <span class="user-name">{{ user()!.username }}</span>
-          <span class="user-email">{{ user()!.email }}</span>
         </div>
       }
-      <button class="btn-logout" (click)="logout()">
-        <span>Cerrar Sesión</span>
-      </button>
+      
+      <!-- Botón Logout consistente con header público -->
+      @if (isAuthenticated()) {
+        <button class="btn-admin btn-logout" (click)="logout()" title="Cerrar Sesión">
+          <span class="auth-icon">🚪</span>
+        </button>
+      }
     </div>
   </header>
 

@@ -1,0 +1,76 @@
+<div class="admin-layout">
+  
+  <!-- Header Admin -->
+  <header class="admin-header">
+    <div class="header-left">
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <span class="hamburger"></span>
+      </button>
+      <h1>Portfolio Admin</h1>
+    </div>
+    
+    <div class="header-right">
+      @if (user()) {
+        <div class="user-info">
+          <span class="user-name">{{ user()!.username }}</span>
+        </div>
+      }
+      
+      @if (isAuthenticated()) {
+        <button class="btn-admin btn-logout" (click)="logout()" title="Cerrar Sesión">
+          <span class="auth-icon">🚪</span>
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- Sidebar Admin -->
+  <aside class="admin-sidebar" [class.mobile-open]="showMobileMenu()">
+    <nav class="sidebar-nav">
+      
+      <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Inicio</span>
+      </a>
+
+      <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">Proyectos</span>
+      </a>
+
+      <a routerLink="/admin/skills" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-text">Habilidades</span>
+      </a>
+
+      <a routerLink="/admin/experience" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">💼</span>
+        <span class="nav-text">Experiencia</span>
+      </a>
+
+      <a routerLink="/admin/education" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🎓</span>
+        <span class="nav-text">Educación</span>
+      </a>
+
+      <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📧</span>
+        <span class="nav-text">Mensajes</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <a routerLink="/" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Ver Portfolio</span>
+      </a>
+      
+    </nav>
+  </aside>
+
+  <!-- Main Content Area (donde se renderizan las páginas) -->
+  <main class="admin-main">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>
