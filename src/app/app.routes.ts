@@ -38,6 +38,23 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/dashboard/dashboard').then(m => m.Dashboard),
     canActivate: [authGuard]
   },
+  {
+    path: 'admin/projects',
+    loadComponent: () => import('./features/admin/projects/projects').then(m => m.AdminProjects),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'admin/projects/new',
+    loadComponent: () => import('./features/admin/projects/project-form/project-form').then(m => m.ProjectForm),
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'admin/projects/edit/:id',
+    loadComponent: () => import('./features/admin/projects/project-form/project-form').then(m => m.ProjectForm),
+    canActivate: [authGuard]
+  },
 
   // Ruta por defecto
   { path: '**', redirectTo: '' }

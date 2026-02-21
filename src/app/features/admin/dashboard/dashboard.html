@@ -1,1 +1,145 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <span class="hamburger"></span>
+      </button>
+      <h1>Portfolio Admin</h1>
+    </div>
+    
+    <div class="header-right">
+      @if (user()) {
+        <div class="user-info">
+          <span class="user-name">{{ user()!.username }}</span>
+          <span class="user-email">{{ user()!.email }}</span>
+        </div>
+      }
+      <button class="btn-logout" (click)="logout()">
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.mobile-open]="showMobileMenu()">
+    <nav class="sidebar-nav">
+      
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">Inicio</span>
+      </a>
+
+      <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">Proyectos</span>
+      </a>
+
+      <a routerLink="/admin/skills" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-text">Habilidades</span>
+      </a>
+
+      <a routerLink="/admin/experience" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">💼</span>
+        <span class="nav-text">Experiencia</span>
+      </a>
+
+      <a routerLink="/admin/education" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">🎓</span>
+        <span class="nav-text">Educación</span>
+      </a>
+
+      <a routerLink="/admin/messages" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">📧</span>
+        <span class="nav-text">Mensajes</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <a routerLink="/" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">Ver Portfolio</span>
+      </a>
+      
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h2>Bienvenido, {{ user()?.username }}!</h2>
+      <p>Gestiona el contenido de tu portfolio desde este panel.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      
+      <div class="stat-card">
+        <div class="stat-icon">📁</div>
+        <div class="stat-info">
+          <div class="stat-value">{{ stats().projects }}</div>
+          <div class="stat-label">Proyectos</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-info">
+          <div class="stat-value">{{ stats().skills }}</div>
+          <div class="stat-label">Habilidades</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">💼</div>
+        <div class="stat-info">
+          <div class="stat-value">{{ stats().experiences }}</div>
+          <div class="stat-label">Experiencias</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📧</div>
+        <div class="stat-info">
+          <div class="stat-value">{{ stats().messages }}</div>
+          <div class="stat-label">Mensajes</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h3>Acciones Rápidas</h3>
+      <div class="actions-grid">
+        
+        <a routerLink="/admin/projects" class="action-card">
+          <span class="action-icon">➕</span>
+          <span class="action-text">Nuevo Proyecto</span>
+        </a>
+
+        <a routerLink="/admin/skills" class="action-card">
+          <span class="action-icon">🎯</span>
+          <span class="action-text">Agregar Habilidad</span>
+        </a>
+
+        <a routerLink="/admin/experience" class="action-card">
+          <span class="action-icon">💼</span>
+          <span class="action-text">Nueva Experiencia</span>
+        </a>
+
+        <a routerLink="/admin/messages" class="action-card">
+          <span class="action-icon">📧</span>
+          <span class="action-text">Ver Mensajes</span>
+        </a>
+
+      </div>
+    </div>
+
+  </main>
+
+</div>

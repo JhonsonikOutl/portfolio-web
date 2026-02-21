@@ -1,0 +1,209 @@
+<div class="form-container">
+  
+  <!-- Header -->
+  <div class="form-header">
+    <h1>{{ isEditMode() ? 'Editar Proyecto' : 'Nuevo Proyecto' }}</h1>
+    <p>{{ isEditMode() ? 'Actualiza la información del proyecto' : 'Completa los datos para agregar un nuevo proyecto' }}</p>
+  </div>
+
+  <!-- Error Message -->
+  @if (error()) {
+    <div class="error-banner">
+      {{ error() }}
+    </div>
+  }
+
+  <!-- Form -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="project-form">
+    
+    <!-- Título -->
+    <div class="form-group">
+      <label for="title">
+        Título <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Ej: Sistema de Gestión de Inventario"
+        [class.error]="hasError('title')"
+      />
+      @if (hasError('title')) {
+        <span class="error-message">{{ getErrorMessage('title') }}</span>
+      }
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-group">
+      <label for="description">
+        Descripción <span class="required">*</span>
+      </label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="4"
+        placeholder="Describe el proyecto, sus objetivos y características principales..."
+        [class.error]="hasError('description')"
+      ></textarea>
+      @if (hasError('description')) {
+        <span class="error-message">{{ getErrorMessage('description') }}</span>
+      }
+    </div>
+
+    <!-- Tecnologías -->
+    <div class="form-group">
+      <label for="technologies">
+        Tecnologías <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        id="technologies"
+        formControlName="technologiesString"
+        placeholder="Angular, .NET Core, MongoDB, Docker"
+        [class.error]="hasError('technologiesString')"
+      />
+      <small class="field-hint">Separa cada tecnología con una coma</small>
+      @if (hasError('technologiesString')) {
+        <span class="error-message">{{ getErrorMessage('technologiesString') }}</span>
+      }
+    </div>
+
+    <!-- Grid de 2 columnas -->
+    <div class="form-grid">
+      
+      <!-- Fecha Inicio -->
+      <div class="form-group">
+        <label for="startDate">
+          Fecha de Inicio <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="startDate"
+          formControlName="startDate"
+          [class.error]="hasError('startDate')"
+        />
+        @if (hasError('startDate')) {
+          <span class="error-message">{{ getErrorMessage('startDate') }}</span>
+        }
+      </div>
+
+      <!-- Fecha Fin -->
+      <div class="form-group">
+        <label for="endDate">
+          Fecha de Fin
+        </label>
+        <input
+          type="date"
+          id="endDate"
+          formControlName="endDate"
+        />
+        <small class="field-hint">Dejar vacío si está en progreso</small>
+      </div>
+
+    </div>
+
+    <!-- Imagen URL -->
+    <div class="form-group">
+      <label for="imageUrl">
+        URL de la Imagen
+      </label>
+      <input
+        type="url"
+        id="imageUrl"
+        formControlName="imageUrl"
+        placeholder="https://ejemplo.com/imagen.jpg"
+      />
+      <small class="field-hint">URL de una imagen representativa del proyecto</small>
+    </div>
+
+    <!-- GitHub URL -->
+    <div class="form-group">
+      <label for="githubUrl">
+        URL de GitHub
+      </label>
+      <input
+        type="url"
+        id="githubUrl"
+        formControlName="githubUrl"
+        placeholder="https://github.com/usuario/proyecto"
+      />
+    </div>
+
+    <!-- Live URL -->
+    <div class="form-group">
+      <label for="liveUrl">
+        URL en Vivo
+      </label>
+      <input
+        type="url"
+        id="liveUrl"
+        formControlName="liveUrl"
+        placeholder="https://proyecto-demo.com"
+      />
+      <small class="field-hint">URL del proyecto desplegado (si aplica)</small>
+    </div>
+
+    <!-- Grid de 2 columnas -->
+    <div class="form-grid">
+      
+      <!-- Orden de Visualización -->
+      <div class="form-group">
+        <label for="displayOrder">
+          Orden de Visualización <span class="required">*</span>
+        </label>
+        <input
+          type="number"
+          id="displayOrder"
+          formControlName="displayOrder"
+          min="0"
+          placeholder="0"
+          [class.error]="hasError('displayOrder')"
+        />
+        <small class="field-hint">Menor número = mayor prioridad</small>
+        @if (hasError('displayOrder')) {
+          <span class="error-message">{{ getErrorMessage('displayOrder') }}</span>
+        }
+      </div>
+
+      <!-- Proyecto Destacado -->
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="isFeatured"
+          />
+          <span>Marcar como proyecto destacado</span>
+        </label>
+        <small class="field-hint">Se mostrará en la página principal</small>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-cancel"
+        (click)="onCancel()"
+        [disabled]="loading()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading() || form.invalid"
+      >
+        @if (loading()) {
+          <span class="btn-spinner"></span>
+          <span>Guardando...</span>
+        } @else {
+          <span>{{ isEditMode() ? 'Actualizar Proyecto' : 'Crear Proyecto' }}</span>
+        }
+      </button>
+    </div>
+
+  </form>
+
+</div>
