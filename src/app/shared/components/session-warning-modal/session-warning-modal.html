@@ -1,0 +1,33 @@
+@if (sessionTimeoutService.showWarning()) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      
+      <!-- Icono de Advertencia -->
+      <div class="warning-icon">⏱️</div>
+      
+      <!-- Título -->
+      <h2 class="modal-title">Sesión por Expirar</h2>
+      
+      <!-- Mensaje -->
+      <p class="modal-message">
+        Tu sesión expirará por inactividad en:
+      </p>
+      
+      <!-- Countdown -->
+      <div class="countdown">
+        {{ formatTime(sessionTimeoutService.remainingSeconds()) }}
+      </div>
+      
+      <!-- Mensaje adicional -->
+      <p class="modal-hint">
+        ¿Deseas continuar trabajando?
+      </p>
+      
+      <!-- Botón -->
+      <button class="btn-continue" (click)="continueSession()">
+        Seguir Conectado
+      </button>
+      
+    </div>
+  </div>
+}
