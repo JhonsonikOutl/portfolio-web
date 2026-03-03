@@ -1,8 +1,15 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { AuthResponse } from '../../../shared/models/auth.model';
+import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../src/environments/environment';
+
+interface DashboardStats {
+  projects: number;
+  skills: number;
+  experiences: number;
+  messages: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -12,66 +19,48 @@ import { AuthResponse } from '../../../shared/models/auth.model';
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
-  user = signal<AuthResponse | null>(null);
-  showMobileMenu = signal(false);
-  isAuthenticated = signal(false);
-
-  stats = signal({
+  stats = signal<DashboardStats>({
     projects: 0,
     skills: 0,
     experiences: 0,
     messages: 0
   });
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  user = signal<{ username: string } | null>(null);
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Obtener datos del usuario
-    const userData = this.authService.getUser();
+    this.loadUser();
+    this.loadStats();
+  }
+
+  private loadUser(): void {
+    // Cargar usuario desde localStorage o servicio
+    const userData = localStorage.getItem('user');
     if (userData) {
-      this.user.set(userData);
+      this.user.set(JSON.parse(userData));
     }
-
-    // Estadísticas (placeholder)
-    this.stats.set({
-      projects: 5,
-      skills: 12,
-      experiences: 3,
-      messages: 8
-    });
-
-    // Check inicial de autenticación
-    this.checkAuth();
-
-    // Suscribirse a cambios de autenticación
-    this.authService.isAuthenticated$.subscribe(auth => {
-      this.isAuthenticated.set(auth);
-    });
   }
 
-  /**
-   * Verificar estado de autenticación
-   */
-  checkAuth(): void {
-    this.isAuthenticated.set(this.authService.isAuthenticated());
-  }
+  private async loadStats(): Promise<void> {
+    try {
+      // Cargar estadísticas desde el backend
+      const [projects, skills, experiences, messages] = await Promise.all([
+        this.http.get<any[]>(`${environment.apiUrl}/projects`).toPromise(),
+        this.http.get<any[]>(`${environment.apiUrl}/skills`).toPromise(),
+        this.http.get<any[]>(`${environment.apiUrl}/experiences`).toPromise(),
+        this.http.get<any[]>(`${environment.apiUrl}/contact`).toPromise()
+      ]);
 
-  /**
-   * Cerrar sesión
-   */
-  logout(): void {
-    this.authService.logout();
-    this.isAuthenticated.set(false);
-    this.router.navigate(['/admin/login']);
-  }
-
-  /**
-   * Toggle menú móvil
-   */
-  toggleMobileMenu(): void {
-    this.showMobileMenu.set(!this.showMobileMenu());
+      this.stats.set({
+        projects: projects?.length || 0,
+        skills: skills?.length || 0,
+        experiences: experiences?.length || 0,
+        messages: messages?.length || 0
+      });
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+    }
   }
 }

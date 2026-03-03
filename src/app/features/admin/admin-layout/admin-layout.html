@@ -1,5 +1,5 @@
 <div class="admin-layout">
-  
+
   <!-- Header Admin -->
   <header class="admin-header">
     <div class="header-left">
@@ -8,18 +8,18 @@
       </button>
       <h1>Portfolio Admin</h1>
     </div>
-    
+
     <div class="header-right">
       @if (user()) {
-        <div class="user-info">
-          <span class="user-name">{{ user()!.username }}</span>
-        </div>
+      <div class="user-info">
+        <span class="user-name">{{ user()!.username }}</span>
+      </div>
       }
-      
+
       @if (isAuthenticated()) {
-        <button class="btn-admin btn-logout" (click)="logout()" title="Cerrar Sesión">
-          <span class="auth-icon">🚪</span>
-        </button>
+      <button class="btn-admin btn-logout" (click)="logout()" title="Cerrar Sesión">
+        <span class="auth-icon">🚪</span>
+      </button>
       }
     </div>
   </header>
@@ -27,8 +27,9 @@
   <!-- Sidebar Admin -->
   <aside class="admin-sidebar" [class.mobile-open]="showMobileMenu()">
     <nav class="sidebar-nav">
-      
-      <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+
+      <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+        class="nav-item">
         <span class="nav-icon">📊</span>
         <span class="nav-text">Inicio</span>
       </a>
@@ -60,11 +61,16 @@
 
       <div class="nav-divider"></div>
 
+      <a routerLink="/admin/settings" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">Configuración</span>
+      </a>
+
       <a routerLink="/" class="nav-item">
         <span class="nav-icon">🏠</span>
         <span class="nav-text">Ver Portfolio</span>
       </a>
-      
+
     </nav>
   </aside>
 

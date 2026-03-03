@@ -1,0 +1,149 @@
+<div class="settings-container">
+  
+  <!-- Header -->
+  <div class="settings-header">
+    <h1>Configuración de Sesión</h1>
+    <p class="subtitle">Gestiona el timeout de inactividad para usuarios autenticados</p>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando configuración...</p>
+    </div>
+  }
+
+  <!-- Form -->
+  @if (!loading()) {
+    <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="settings-form">
+      
+      <!-- Timeout de Inactividad -->
+      <div class="form-group">
+        <label for="timeout">
+          Timeout de Inactividad (minutos)
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="number" 
+          id="timeout"
+          formControlName="inactivityTimeoutMinutes"
+          class="form-control"
+          [class.error]="hasError('inactivityTimeoutMinutes')"
+          min="1"
+          max="1440"
+          placeholder="15"
+        />
+        @if (hasError('inactivityTimeoutMinutes')) {
+          <span class="error-message">{{ getErrorMessage('inactivityTimeoutMinutes') }}</span>
+        }
+        <p class="field-hint">
+          Tiempo de inactividad antes de cerrar sesión automáticamente. 
+          Recomendado: 15-30 minutos
+        </p>
+      </div>
+
+      <!-- Advertencia Previa -->
+      <div class="form-group">
+        <label for="warning">
+          Advertencia Previa (minutos)
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="number" 
+          id="warning"
+          formControlName="warningBeforeTimeoutMinutes"
+          class="form-control"
+          [class.error]="hasError('warningBeforeTimeoutMinutes')"
+          min="0"
+          max="60"
+          step="0.25"
+          placeholder="1"
+        />
+        @if (hasError('warningBeforeTimeoutMinutes')) {
+          <span class="error-message">{{ getErrorMessage('warningBeforeTimeoutMinutes') }}</span>
+        }
+        <p class="field-hint">
+          Tiempo de advertencia antes del cierre. El modal aparecerá con esta antelación.
+          Recomendado: 1-2 minutos
+        </p>
+      </div>
+
+      <!-- Estado Habilitado/Deshabilitado -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            formControlName="isEnabled"
+            class="checkbox-input"
+          />
+          <span>Habilitar timeout de sesión</span>
+        </label>
+        <p class="field-hint">
+          Si está deshabilitado, las sesiones no caducarán por inactividad
+        </p>
+      </div>
+
+      <!-- Preview de Comportamiento -->
+      <div class="behavior-preview">
+        <h3>Vista Previa del Comportamiento</h3>
+        <div class="preview-timeline">
+          <div class="timeline-item">
+            <span class="timeline-time">00:00</span>
+            <span class="timeline-event">Usuario inicia sesión</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">
+              {{ settingsForm.value.inactivityTimeoutMinutes - settingsForm.value.warningBeforeTimeoutMinutes }}:00
+            </span>
+            <span class="timeline-event">⚠️ Modal de advertencia aparece</span>
+          </div>
+          <div class="timeline-item">
+            <span class="timeline-time">{{ settingsForm.value.inactivityTimeoutMinutes }}:00</span>
+            <span class="timeline-event">🚪 Sesión cerrada automáticamente</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      @if (successMessage()) {
+        <div class="alert alert-success">
+          {{ successMessage() }}
+        </div>
+      }
+
+      @if (errorMessage()) {
+        <div class="alert alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="resetToDefaults()"
+          [disabled]="saving()"
+        >
+          Restablecer Valores por Defecto
+        </button>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="saving() || settingsForm.invalid"
+        >
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Guardando...
+          } @else {
+            Guardar Configuración
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+
+</div>
