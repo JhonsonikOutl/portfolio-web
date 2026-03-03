@@ -1,0 +1,158 @@
+<div class="experience-container">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Gestión de Experiencia Laboral</h1>
+      <p class="subtitle">Administra tu trayectoria profesional</p>
+    </div>
+    <a routerLink="/admin/experience/new" class="btn btn-primary">
+      + Nueva Experiencia
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando experiencias...</p>
+    </div>
+  }
+
+  <!-- Timeline de Experiencias -->
+  @if (!loading() && experiences().length > 0) {
+    <div class="timeline-container">
+      
+      @for (exp of experiences(); track exp.id) {
+        <div class="timeline-item" [class.current-job]="exp.isCurrentJob">
+          
+          <!-- Timeline Marker -->
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+            <div class="marker-line"></div>
+          </div>
+
+          <!-- Experience Card -->
+          <div class="experience-card">
+            
+            <!-- Header -->
+            <div class="card-header">
+              <div class="header-info">
+                <h2 class="position">{{ exp.position }}</h2>
+                <h3 class="company">{{ exp.company }}</h3>
+                <div class="date-info">
+                  <span class="date-range">
+                    {{ formatDate(exp.startDate) }} - 
+                    @if (exp.isCurrentJob) {
+                      <span class="current-badge">Actualidad</span>
+                    } @else {
+                      {{ formatDate(exp.endDate!) }}
+                    }
+                  </span>
+                  <span class="duration">{{ getDuration(exp.startDate, exp.endDate) }}</span>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="card-actions">
+                <a 
+                  [routerLink]="['/admin/experience/edit', exp.id]" 
+                  class="btn-icon btn-edit"
+                  title="Editar"
+                >
+                  ✏️
+                </a>
+                <button 
+                  class="btn-icon btn-delete"
+                  (click)="confirmDelete(exp)"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="card-body">
+              <p class="description">{{ exp.description }}</p>
+
+              <!-- Achievements -->
+              @if (exp.achievements && exp.achievements.length > 0) {
+                <div class="achievements-section">
+                  <h4>Logros Destacados:</h4>
+                  <ul class="achievements-list">
+                    @for (achievement of exp.achievements; track $index) {
+                      <li>{{ achievement }}</li>
+                    }
+                  </ul>
+                </div>
+              }
+
+              <!-- Technologies -->
+              @if (exp.technologies && exp.technologies.length > 0) {
+                <div class="technologies-section">
+                  <h4>Tecnologías:</h4>
+                  <div class="tech-tags">
+                    @for (tech of exp.technologies; track $index) {
+                      <span class="tech-tag">{{ tech }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+          </div>
+
+        </div>
+      }
+
+    </div>
+
+    <!-- Total Count -->
+    <div class="footer-info">
+      <p>Total: {{ experiences().length }} experiencias laborales</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && experiences().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">💼</div>
+      <h3>No hay experiencias registradas</h3>
+      <p>Comienza agregando tu primera experiencia laboral</p>
+      <a routerLink="/admin/experience/new" class="btn btn-primary">
+        + Agregar Primera Experiencia
+      </a>
+    </div>
+  }
+
+</div>
+
+<!-- Confirm Dialog -->
+@if (showConfirmDialog()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      
+      <div class="modal-icon">⚠️</div>
+      
+      <h2 class="modal-title">Eliminar Experiencia</h2>
+      
+      <p class="modal-message">
+        ¿Estás seguro de eliminar la experiencia en 
+        <strong>{{ experienceToDelete()?.company }}</strong>
+        como <strong>{{ experienceToDelete()?.position }}</strong>? 
+        Esta acción no se puede deshacer.
+      </p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button class="btn btn-danger" (click)="deleteExperience()">
+          Eliminar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+}

@@ -73,6 +73,18 @@ export const routes: Routes = [
         path: 'skills/edit/:id',
         loadComponent: () => import('./features/admin/admin-skills/skill-form/skill-form').then(m => m.SkillForm)
       },
+      {
+      path: 'experience',
+      loadComponent: () => import('./features/admin/admin-experience/admin-experience').then(m => m.AdminExperience)
+    },
+    {
+      path: 'experience/new',
+      loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
+    },
+    {
+      path: 'experience/edit/:id',
+      loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
+    },
     ]
   },
 
