@@ -60,7 +60,19 @@ export const routes: Routes = [
       {
         path: 'settings',
         loadComponent: () => import('./features/admin/settings/settings').then(m => m.SettingsComponent)
-      }
+      },
+      {
+        path: 'skills',
+        loadComponent: () => import('./features/admin/admin-skills/admin-skills').then(m => m.AdminSkills)
+      },
+      {
+        path: 'skills/new',
+        loadComponent: () => import('./features/admin/admin-skills/skill-form/skill-form').then(m => m.SkillForm)
+      },
+      {
+        path: 'skills/edit/:id',
+        loadComponent: () => import('./features/admin/admin-skills/skill-form/skill-form').then(m => m.SkillForm)
+      },
     ]
   },
 

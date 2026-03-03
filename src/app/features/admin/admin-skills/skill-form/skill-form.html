@@ -1,0 +1,159 @@
+<div class="form-container">
+  
+  <!-- Header -->
+  <div class="form-header">
+    <h1>{{ isEditMode() ? 'Editar Habilidad' : 'Nueva Habilidad' }}</h1>
+    <p class="subtitle">{{ isEditMode() ? 'Modifica los datos de la habilidad' : 'Agrega una nueva habilidad a tu portfolio' }}</p>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando habilidad...</p>
+    </div>
+  }
+
+  <!-- Form -->
+  @if (!loading()) {
+    <form [formGroup]="skillForm" (ngSubmit)="onSubmit()" class="skill-form">
+      
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="name">
+          Nombre de la Habilidad
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="name"
+          formControlName="name"
+          class="form-control"
+          [class.error]="hasError('name')"
+          placeholder="Ej: Angular, TypeScript, Docker"
+        />
+        @if (hasError('name')) {
+          <span class="error-message">{{ getErrorMessage('name') }}</span>
+        }
+      </div>
+
+      <!-- Categoría -->
+      <div class="form-group">
+        <label for="category">
+          Categoría
+          <span class="required">*</span>
+        </label>
+        <select 
+          id="category"
+          formControlName="category"
+          class="form-control"
+          [class.error]="hasError('category')"
+        >
+          <option value="">Selecciona una categoría</option>
+          @for (cat of categories; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+        @if (hasError('category')) {
+          <span class="error-message">{{ getErrorMessage('category') }}</span>
+        }
+      </div>
+
+      <!-- Nivel de Dominio -->
+      <div class="form-group">
+        <label for="level">
+          Nivel de Dominio
+          <span class="required">*</span>
+          <span class="level-value">{{ currentLevel }}%</span>
+        </label>
+        <input 
+          type="range" 
+          id="level"
+          formControlName="level"
+          class="range-control"
+          min="0"
+          max="100"
+          step="5"
+        />
+        <!-- Visual Preview -->
+        <div class="level-preview">
+          <div class="preview-bar">
+            <div class="preview-fill" [style.width.%]="currentLevel"></div>
+          </div>
+          <div class="level-labels">
+            <span>Básico</span>
+            <span>Intermedio</span>
+            <span>Avanzado</span>
+            <span>Experto</span>
+          </div>
+        </div>
+        @if (hasError('level')) {
+          <span class="error-message">{{ getErrorMessage('level') }}</span>
+        }
+      </div>
+
+      <!-- Icono (Opcional) -->
+      <div class="form-group">
+        <label for="icon">
+          Clase de Icono (Opcional)
+        </label>
+        <input 
+          type="text" 
+          id="icon"
+          formControlName="icon"
+          class="form-control"
+          placeholder="Ej: devicon-angular-plain, fab fa-react"
+        />
+        <p class="field-hint">
+          Puedes usar clases de <a href="https://devicon.dev" target="_blank" rel="noopener">Devicon</a> 
+          o <a href="https://fontawesome.com" target="_blank" rel="noopener">Font Awesome</a>
+        </p>
+      </div>
+
+      <!-- Orden (Opcional) -->
+      <div class="form-group">
+        <label for="displayOrder">
+          Orden de Visualización
+        </label>
+        <input 
+          type="number" 
+          id="displayOrder"
+          formControlName="displayOrder"
+          class="form-control"
+          min="0"
+          placeholder="0"
+        />
+        <p class="field-hint">
+          Número para ordenar las habilidades (menor número = primero)
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="saving()"
+        >
+          Cancelar
+        </button>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="saving() || skillForm.invalid"
+        >
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Guardando...
+          } @else {
+            {{ isEditMode() ? 'Actualizar Habilidad' : 'Crear Habilidad' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+
+</div>
