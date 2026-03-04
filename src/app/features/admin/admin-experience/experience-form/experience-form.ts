@@ -54,13 +54,18 @@ export class ExperienceForm implements OnInit {
 
     // Watch isCurrentJob para limpiar endDate
     this.experienceForm.get('isCurrentJob')?.valueChanges.subscribe(isCurrent => {
+      const endDateControl = this.experienceForm.get('endDate');
+      
       if (isCurrent) {
-        this.experienceForm.get('endDate')?.setValue('');
-        this.experienceForm.get('endDate')?.clearValidators();
+        endDateControl?.disable();
+        endDateControl?.setValue('');
+        endDateControl?.clearValidators();
       } else {
-        this.experienceForm.get('endDate')?.setValidators([Validators.required]);
+        endDateControl?.enable();
+        endDateControl?.setValidators([Validators.required]);
       }
-      this.experienceForm.get('endDate')?.updateValueAndValidity();
+      
+      endDateControl?.updateValueAndValidity();
     });
   }
 

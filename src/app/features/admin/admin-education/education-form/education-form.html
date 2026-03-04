@@ -1,0 +1,200 @@
+<div class="form-container">
+  
+  <!-- Header -->
+  <div class="form-header">
+    <h1>{{ isEditMode() ? 'Editar Educación' : 'Nueva Educación' }}</h1>
+    <p class="subtitle">{{ isEditMode() ? 'Modifica los datos de tu formación académica' : 'Agrega una nueva formación a tu trayectoria' }}</p>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando educación...</p>
+    </div>
+  }
+
+  <!-- Form -->
+  @if (!loading()) {
+    <form [formGroup]="educationForm" (ngSubmit)="onSubmit()" class="education-form">
+      
+      <!-- Institution -->
+      <div class="form-group">
+        <label for="institution">
+          Institución Educativa
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="institution"
+          formControlName="institution"
+          class="form-control"
+          [class.error]="hasError('institution')"
+          placeholder="Ej: Universidad Nacional, SENA, Platzi"
+        />
+        @if (hasError('institution')) {
+          <span class="error-message">{{ getErrorMessage('institution') }}</span>
+        }
+      </div>
+
+      <!-- Degree -->
+      <div class="form-group">
+        <label for="degree">
+          Título / Certificación
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="degree"
+          formControlName="degree"
+          class="form-control"
+          [class.error]="hasError('degree')"
+          placeholder="Ej: Ingeniería de Sistemas, Tecnólogo, Certificación"
+        />
+        @if (hasError('degree')) {
+          <span class="error-message">{{ getErrorMessage('degree') }}</span>
+        }
+      </div>
+
+      <!-- Field of Study -->
+      <div class="form-group">
+        <label for="fieldOfStudy">
+          Campo de Estudio
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="fieldOfStudy"
+          formControlName="fieldOfStudy"
+          class="form-control"
+          [class.error]="hasError('fieldOfStudy')"
+          placeholder="Ej: Desarrollo de Software, Ciencias de la Computación"
+        />
+        @if (hasError('fieldOfStudy')) {
+          <span class="error-message">{{ getErrorMessage('fieldOfStudy') }}</span>
+        }
+      </div>
+
+      <!-- Dates Row -->
+      <div class="form-row">
+        
+        <!-- Start Date -->
+        <div class="form-group">
+          <label for="startDate">
+            Fecha de Inicio
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="date" 
+            id="startDate"
+            formControlName="startDate"
+            class="form-control"
+            [class.error]="hasError('startDate')"
+          />
+          @if (hasError('startDate')) {
+            <span class="error-message">{{ getErrorMessage('startDate') }}</span>
+          }
+        </div>
+
+        <!-- End Date -->
+        <div class="form-group">
+          <label for="endDate">
+            Fecha de Fin
+            @if (!isCurrentlyStudying) {
+              <span class="required">*</span>
+            }
+          </label>
+          <input 
+            type="date" 
+            id="endDate"
+            formControlName="endDate"
+            class="form-control"
+            [class.error]="hasError('endDate')"
+          />
+          @if (hasError('endDate')) {
+            <span class="error-message">{{ getErrorMessage('endDate') }}</span>
+          }
+        </div>
+
+      </div>
+
+      <!-- Currently Studying Checkbox -->
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox"
+            formControlName="isCurrentlyStudying"
+            class="checkbox-input"
+          />
+          <span class="checkbox-text">Actualmente estudio aquí</span>
+        </label>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">
+          Descripción (Opcional)
+        </label>
+        <textarea 
+          id="description"
+          formControlName="description"
+          class="form-control"
+          [class.error]="hasError('description')"
+          rows="4"
+          placeholder="Describe logros, proyectos destacados o áreas de enfoque..."
+        ></textarea>
+        @if (hasError('description')) {
+          <span class="error-message">{{ getErrorMessage('description') }}</span>
+        }
+        <p class="field-hint">
+          Máximo 1000 caracteres
+        </p>
+      </div>
+
+      <!-- Display Order -->
+      <div class="form-group">
+        <label for="displayOrder">
+          Orden de Visualización
+        </label>
+        <input 
+          type="number" 
+          id="displayOrder"
+          formControlName="displayOrder"
+          class="form-control"
+          min="0"
+          placeholder="0"
+        />
+        <p class="field-hint">
+          Número para ordenar la educación (menor número = primero)
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="saving()"
+        >
+          Cancelar
+        </button>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="saving() || educationForm.invalid"
+        >
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Guardando...
+          } @else {
+            {{ isEditMode() ? 'Actualizar Educación' : 'Crear Educación' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+
+</div>

@@ -91,7 +91,6 @@
             formControlName="endDate"
             class="form-control"
             [class.error]="hasError('endDate')"
-            [disabled]="isCurrentJob"
           />
           @if (hasError('endDate')) {
             <span class="error-message">{{ getErrorMessage('endDate') }}</span>

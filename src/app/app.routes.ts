@@ -74,17 +74,29 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/admin-skills/skill-form/skill-form').then(m => m.SkillForm)
       },
       {
-      path: 'experience',
-      loadComponent: () => import('./features/admin/admin-experience/admin-experience').then(m => m.AdminExperience)
-    },
-    {
-      path: 'experience/new',
-      loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
-    },
-    {
-      path: 'experience/edit/:id',
-      loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
-    },
+        path: 'experience',
+        loadComponent: () => import('./features/admin/admin-experience/admin-experience').then(m => m.AdminExperience)
+      },
+      {
+        path: 'experience/new',
+        loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
+      },
+      {
+        path: 'experience/edit/:id',
+        loadComponent: () => import('./features/admin/admin-experience/experience-form/experience-form').then(m => m.ExperienceForm)
+      },
+      {
+        path: 'education',
+        loadComponent: () => import('./features/admin/admin-education/admin-education').then(m => m.AdminEducation)
+      },
+      {
+        path: 'education/new',
+        loadComponent: () => import('./features/admin/admin-education/education-form/education-form').then(m => m.EducationForm)
+      },
+      {
+        path: 'education/edit/:id',
+        loadComponent: () => import('./features/admin/admin-education/education-form/education-form').then(m => m.EducationForm)
+      },
     ]
   },
 
