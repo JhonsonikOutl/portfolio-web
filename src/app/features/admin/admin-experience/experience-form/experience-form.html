@@ -1,0 +1,256 @@
+<div class="form-container">
+  
+  <!-- Header -->
+  <div class="form-header">
+    <h1>{{ isEditMode() ? 'Editar Experiencia' : 'Nueva Experiencia' }}</h1>
+    <p class="subtitle">{{ isEditMode() ? 'Modifica los datos de la experiencia laboral' : 'Agrega una nueva experiencia a tu trayectoria' }}</p>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando experiencia...</p>
+    </div>
+  }
+
+  <!-- Form -->
+  @if (!loading()) {
+    <form [formGroup]="experienceForm" (ngSubmit)="onSubmit()" class="experience-form">
+      
+      <!-- Company -->
+      <div class="form-group">
+        <label for="company">
+          Empresa
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="company"
+          formControlName="company"
+          class="form-control"
+          [class.error]="hasError('company')"
+          placeholder="Ej: Google, Microsoft, Startup XYZ"
+        />
+        @if (hasError('company')) {
+          <span class="error-message">{{ getErrorMessage('company') }}</span>
+        }
+      </div>
+
+      <!-- Position -->
+      <div class="form-group">
+        <label for="position">
+          Cargo / Posición
+          <span class="required">*</span>
+        </label>
+        <input 
+          type="text" 
+          id="position"
+          formControlName="position"
+          class="form-control"
+          [class.error]="hasError('position')"
+          placeholder="Ej: Senior Full Stack Developer"
+        />
+        @if (hasError('position')) {
+          <span class="error-message">{{ getErrorMessage('position') }}</span>
+        }
+      </div>
+
+      <!-- Dates Row -->
+      <div class="form-row">
+        
+        <!-- Start Date -->
+        <div class="form-group">
+          <label for="startDate">
+            Fecha de Inicio
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="date" 
+            id="startDate"
+            formControlName="startDate"
+            class="form-control"
+            [class.error]="hasError('startDate')"
+          />
+          @if (hasError('startDate')) {
+            <span class="error-message">{{ getErrorMessage('startDate') }}</span>
+          }
+        </div>
+
+        <!-- End Date -->
+        <div class="form-group">
+          <label for="endDate">
+            Fecha de Fin
+            @if (!isCurrentJob) {
+              <span class="required">*</span>
+            }
+          </label>
+          <input 
+            type="date" 
+            id="endDate"
+            formControlName="endDate"
+            class="form-control"
+            [class.error]="hasError('endDate')"
+          />
+          @if (hasError('endDate')) {
+            <span class="error-message">{{ getErrorMessage('endDate') }}</span>
+          }
+        </div>
+
+      </div>
+
+      <!-- Current Job Checkbox -->
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox"
+            formControlName="isCurrentJob"
+            class="checkbox-input"
+          />
+          <span class="checkbox-text">Actualmente trabajo aquí</span>
+        </label>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">
+          Descripción del Rol
+          <span class="required">*</span>
+        </label>
+        <textarea 
+          id="description"
+          formControlName="description"
+          class="form-control"
+          [class.error]="hasError('description')"
+          rows="4"
+          placeholder="Describe tus responsabilidades principales..."
+        ></textarea>
+        @if (hasError('description')) {
+          <span class="error-message">{{ getErrorMessage('description') }}</span>
+        }
+        <p class="field-hint">
+          Mínimo 10 caracteres, máximo 1000
+        </p>
+      </div>
+
+      <!-- Achievements -->
+      <div class="form-group">
+        <label>
+          Logros Destacados
+        </label>
+        
+        <div class="array-container" formArrayName="achievements">
+          @for (achievement of achievementsArray.controls; track $index) {
+            <div class="array-item">
+              <input 
+                type="text" 
+                [formControlName]="$index"
+                class="form-control"
+                [class.error]="hasArrayControlError($index, 'achievements')"
+                placeholder="Ej: Lideré la migración a microservicios reduciendo tiempos en 40%"
+              />
+              <button 
+                type="button" 
+                class="btn-remove"
+                (click)="removeAchievement($index)"
+                title="Eliminar"
+              >
+                ✕
+              </button>
+            </div>
+          }
+        </div>
+
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-add"
+          (click)="addAchievement()"
+        >
+          + Agregar Logro
+        </button>
+      </div>
+
+      <!-- Technologies -->
+      <div class="form-group">
+        <label>
+          Tecnologías Utilizadas
+        </label>
+        
+        <div class="array-container" formArrayName="technologies">
+          @for (tech of technologiesArray.controls; track $index) {
+            <div class="array-item">
+              <input 
+                type="text" 
+                [formControlName]="$index"
+                class="form-control"
+                [class.error]="hasArrayControlError($index, 'technologies')"
+                placeholder="Ej: Angular, .NET Core, MongoDB"
+              />
+              <button 
+                type="button" 
+                class="btn-remove"
+                (click)="removeTechnology($index)"
+                title="Eliminar"
+              >
+                ✕
+              </button>
+            </div>
+          }
+        </div>
+
+        <button 
+          type="button" 
+          class="btn btn-secondary btn-add"
+          (click)="addTechnology()"
+        >
+          + Agregar Tecnología
+        </button>
+      </div>
+
+      <!-- Display Order -->
+      <div class="form-group">
+        <label for="displayOrder">
+          Orden de Visualización
+        </label>
+        <input 
+          type="number" 
+          id="displayOrder"
+          formControlName="displayOrder"
+          class="form-control"
+          min="0"
+          placeholder="0"
+        />
+        <p class="field-hint">
+          Número para ordenar las experiencias (menor número = primero)
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [disabled]="saving()"
+        >
+          Cancelar
+        </button>
+
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="saving() || experienceForm.invalid"
+        >
+          @if (saving()) {
+            <span class="spinner-small"></span>
+            Guardando...
+          } @else {
+            {{ isEditMode() ? 'Actualizar Experiencia' : 'Crear Experiencia' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+
+</div>

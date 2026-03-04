@@ -1,0 +1,137 @@
+<div class="education-container">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Gestión de Educación</h1>
+      <p class="subtitle">Administra tu formación académica y certificaciones</p>
+    </div>
+    <a routerLink="/admin/education/new" class="btn btn-primary">
+      + Nueva Educación
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando educación...</p>
+    </div>
+  }
+
+  <!-- Timeline de Educación -->
+  @if (!loading() && educations().length > 0) {
+    <div class="timeline-container">
+      
+      @for (edu of educations(); track edu.id) {
+        <div class="timeline-item" [class.current-study]="edu.isCurrentlyStudying">
+          
+          <!-- Timeline Marker -->
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+            <div class="marker-line"></div>
+          </div>
+
+          <!-- Education Card -->
+          <div class="education-card">
+            
+            <!-- Header -->
+            <div class="card-header">
+              <div class="header-info">
+                <h2 class="degree">{{ edu.degree }}</h2>
+                <h3 class="institution">{{ edu.institution }}</h3>
+                <p class="field-of-study">{{ edu.fieldOfStudy }}</p>
+                <div class="date-info">
+                  <span class="date-range">
+                    {{ formatDate(edu.startDate) }} - 
+                    @if (edu.isCurrentlyStudying) {
+                      <span class="current-badge">En Curso</span>
+                    } @else {
+                      {{ formatDate(edu.endDate!) }}
+                    }
+                  </span>
+                  <span class="duration">{{ getDuration(edu.startDate, edu.endDate) }}</span>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="card-actions">
+                <a 
+                  [routerLink]="['/admin/education/edit', edu.id]" 
+                  class="btn-icon btn-edit"
+                  title="Editar"
+                >
+                  ✏️
+                </a>
+                <button 
+                  class="btn-icon btn-delete"
+                  (click)="confirmDelete(edu)"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+
+            <!-- Description -->
+            @if (edu.description) {
+              <div class="card-body">
+                <p class="description">{{ edu.description }}</p>
+              </div>
+            }
+
+          </div>
+
+        </div>
+      }
+
+    </div>
+
+    <!-- Total Count -->
+    <div class="footer-info">
+      <p>Total: {{ educations().length }} registros académicos</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && educations().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">🎓</div>
+      <h3>No hay educación registrada</h3>
+      <p>Comienza agregando tu formación académica</p>
+      <a routerLink="/admin/education/new" class="btn btn-primary">
+        + Agregar Primera Educación
+      </a>
+    </div>
+  }
+
+</div>
+
+<!-- Confirm Dialog -->
+@if (showConfirmDialog()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      
+      <div class="modal-icon">⚠️</div>
+      
+      <h2 class="modal-title">Eliminar Educación</h2>
+      
+      <p class="modal-message">
+        ¿Estás seguro de eliminar 
+        <strong>{{ educationToDelete()?.degree }}</strong>
+        de <strong>{{ educationToDelete()?.institution }}</strong>? 
+        Esta acción no se puede deshacer.
+      </p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button class="btn btn-danger" (click)="deleteEducation()">
+          Eliminar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+}

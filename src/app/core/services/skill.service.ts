@@ -61,3 +61,5 @@ export class SkillService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
+
+export type { Skill };

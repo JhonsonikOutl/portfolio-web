@@ -1,0 +1,126 @@
+<div class="skills-container">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Gestión de Habilidades</h1>
+      <p class="subtitle">Administra tus habilidades técnicas y profesionales</p>
+    </div>
+    <a routerLink="/admin/skills/new" class="btn btn-primary">
+      + Nueva Habilidad
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando habilidades...</p>
+    </div>
+  }
+
+  <!-- Skills Grid por Categoría -->
+  @if (!loading() && skills().length > 0) {
+    <div class="categories-container">
+      
+      @for (category of getCategories(); track category) {
+        <div class="category-section">
+          <h2 class="category-title">{{ category }}</h2>
+          
+          <div class="skills-grid">
+            @for (skill of getSkillsByCategory(category); track skill.id) {
+              <div class="skill-card">
+                
+                <!-- Icon o Iniciales -->
+                <div class="skill-icon" [class.no-icon]="!hasIcon(skill.icon)">
+                  @if (hasIcon(skill.icon)) {
+                    <i [class]="skill.icon"></i>
+                  } @else {
+                    <span class="initials">{{ getInitials(skill.name) }}</span>
+                  }
+                </div>
+                
+                <!-- Info -->
+                <div class="skill-info">
+                  <h3 class="skill-name">{{ skill.name }}</h3>
+                  
+                  <!-- Progress Bar -->
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="skill.level"></div>
+                  </div>
+                  <span class="skill-level">{{ skill.level }}%</span>
+                </div>
+
+                <!-- Actions -->
+                <div class="skill-actions">
+                  <a 
+                    [routerLink]="['/admin/skills/edit', skill.id]" 
+                    class="btn-icon btn-edit"
+                    title="Editar"
+                  >
+                    ✏️
+                  </a>
+                  <button 
+                    class="btn-icon btn-delete"
+                    (click)="confirmDelete(skill)"
+                    title="Eliminar"
+                  >
+                    🗑️
+                  </button>
+                </div>
+
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <!-- Total Count -->
+    <div class="footer-info">
+      <p>Total: {{ skills().length }} habilidades</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && skills().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">🎯</div>
+      <h3>No hay habilidades registradas</h3>
+      <p>Comienza agregando tu primera habilidad</p>
+      <a routerLink="/admin/skills/new" class="btn btn-primary">
+        + Agregar Primera Habilidad
+      </a>
+    </div>
+  }
+
+</div>
+
+<!-- Confirm Dialog -->
+@if (showConfirmDialog()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      
+      <div class="modal-icon">⚠️</div>
+      
+      <h2 class="modal-title">Eliminar Habilidad</h2>
+      
+      <p class="modal-message">
+        ¿Estás seguro de eliminar la habilidad 
+        <strong>{{ skillToDelete()?.name }}</strong>? 
+        Esta acción no se puede deshacer.
+      </p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button class="btn btn-danger" (click)="deleteSkill()">
+          Eliminar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+}

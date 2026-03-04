@@ -1,106 +1,74 @@
-<!-- Loading -->
-<div *ngIf="loading()" class="loading-container">
-  <div class="loading"></div>
-</div>
-
-<!-- Error -->
-<div *ngIf="error()" class="error-container">
-  <div class="alert-error">
-    <span>{{ error() }}</span>
+<section class="skills-section">
+  
+  <!-- Header -->
+  <div class="section-header">
+    <h1>Habilidades Técnicas</h1>
+    <p class="section-subtitle">Tecnologías y herramientas que domino</p>
   </div>
-</div>
 
-<!-- Skills Section -->
-<section *ngIf="!loading()" class="skills-section">
-  <div class="container">
-    
-    <!-- Header -->
-    <div class="section-header">
-      <h1 class="section-title">Habilidades Técnicas</h1>
-      <p class="section-subtitle">
-        Tecnologías y herramientas que domino
-      </p>
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando habilidades...</p>
     </div>
+  }
 
-    <!-- Filters -->
-    <div class="filters">
-      <button 
-        (click)="filterByCategory('all')"
-        [class.active]="selectedCategory() === 'all'"
-        class="filter-btn">
-        Todas
-      </button>
-      <button 
-        *ngFor="let category of categories()"
-        (click)="filterByCategory(category)"
-        [class.active]="selectedCategory() === category"
-        class="filter-btn">
-        {{ category }}
-      </button>
-    </div>
-
-    <!-- Skills by Category (Vista de Todas las Categorías) -->
-    <div *ngIf="selectedCategory() === 'all'" class="categories-container">
-      <div *ngFor="let category of categories()" class="category-section">
-        <h2 class="category-title">{{ category }}</h2>
-        <div class="skills-grid">
-          <div *ngFor="let skill of getSkillsByCategory(category)" class="skill-card">
-            <div class="skill-header">
-              <div class="skill-info">
-                <h3 class="skill-name">{{ skill.name }}</h3>
-                <span class="skill-level">{{ getLevelLabel(skill.level) }}</span>
+  <!-- Skills por Categoría -->
+  @if (!loading() && skills().length > 0) {
+    <div class="categories-container">
+      
+      @for (category of getCategories(); track category) {
+        <div class="category-block">
+          
+          <!-- Category Title -->
+          <h2 class="category-title">{{ category }}</h2>
+          
+          <!-- Skills List -->
+          <div class="skills-list">
+            @for (skill of getSkillsByCategory(category); track skill.id) {
+              <div class="skill-item">
+                
+                <!-- Skill Header -->
+                <div class="skill-header">
+                  <div class="skill-icon-wrapper" [class.no-icon]="!hasIcon(skill.icon)">
+                    @if (hasIcon(skill.icon)) {
+                      <i [class]="skill.icon" class="skill-icon"></i>
+                    } @else {
+                      <span class="skill-initials">{{ getInitials(skill.name) }}</span>
+                    }
+                  </div>
+                  <h3 class="skill-name">{{ skill.name }}</h3>
+                  <span class="skill-percentage">{{ skill.level }}%</span>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                  <div class="progress-bar">
+                    <div 
+                      class="progress-fill" 
+                      [style.width.%]="skill.level"
+                      [attr.data-level]="skill.level"
+                    ></div>
+                  </div>
+                </div>
+                
               </div>
-              <span class="skill-percentage">{{ skill.level }}%</span>
-            </div>
-            
-            <div class="progress-bar">
-              <div 
-                class="progress-fill" 
-                [style.width.%]="skill.level"
-                [style.background]="getLevelColor(skill.level)">
-              </div>
-            </div>
+            }
           </div>
+          
         </div>
-      </div>
+      }
+      
     </div>
+  }
 
-    <!-- Skills Filtradas por Categoría -->
-    <div *ngIf="selectedCategory() !== 'all'" class="skills-grid-filtered">
-      <div *ngFor="let skill of getFilteredSkills()" class="skill-card">
-        <div class="skill-header">
-          <div class="skill-info">
-            <h3 class="skill-name">{{ skill.name }}</h3>
-            <span class="skill-level">{{ getLevelLabel(skill.level) }}</span>
-          </div>
-          <span class="skill-percentage">{{ skill.level }}%</span>
-        </div>
-        
-        <div class="progress-bar">
-          <div 
-            class="progress-fill" 
-            [style.width.%]="skill.level"
-            [style.background]="getLevelColor(skill.level)">
-          </div>
-        </div>
-      </div>
+  <!-- Empty State -->
+  @if (!loading() && skills().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">🎯</div>
+      <p>No hay habilidades disponibles</p>
     </div>
+  }
 
-    <!-- Stats Summary -->
-    <div class="stats-summary">
-      <div class="stat-card">
-        <div class="stat-number">{{ skills().length }}</div>
-        <div class="stat-label">Tecnologías</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">{{ categories().length }}</div>
-        <div class="stat-label">Categorías</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">5+</div>
-        <div class="stat-label">Años de Experiencia</div>
-      </div>
-    </div>
-
-  </div>
 </section>
