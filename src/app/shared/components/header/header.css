@@ -1,3 +1,7 @@
+.menu-toggle {
+  display: none;
+}
+
 /* Responsive y Menú Móvil */
 @media (max-width: 768px) {
   .menu-toggle {
@@ -72,7 +76,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;                /* Tamaño cuadrado */
+  width: 42px;
   height: 42px;
   border-radius: 8px;
   font-weight: 600;
@@ -84,10 +88,10 @@
 }
 
 .auth-icon {
-  font-size: 1.5rem;  /* Más grande */
+  font-size: 1.5rem;
 }
 
-/* Botón Login (Azul/Púrpura) */
+/* Botón Login*/
 .btn-login {
   background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
   color: white;
@@ -99,7 +103,7 @@
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
 }
 
-/* Botón Logout (Rojo) */
+/* Botón Logout*/
 .btn-logout {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   color: white;
@@ -111,7 +115,7 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
 }
 
-/* Botón Dashboard (Verde/Cyan) */
+/* Botón Dashboard*/
 .btn-dashboard {
   background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
   color: white;

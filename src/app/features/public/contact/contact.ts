@@ -10,31 +10,27 @@ import { ContactService } from '../../../core/services/contact.service';
   styleUrl: './contact.css'
 })
 export class Contact {
-  // Form data
   name = signal('');
   email = signal('');
   subject = signal('');
   message = signal('');
+  radicateNumber = signal('');
 
-  // State
   loading = signal(false);
   success = signal(false);
   error = signal<string | null>(null);
 
-  constructor(private contactService: ContactService) {}
+  constructor(private contactService: ContactService) { }
 
   onSubmit(): void {
-    // Reset states
     this.error.set(null);
     this.success.set(false);
 
-    // Validate
     if (!this.isFormValid()) {
       this.error.set('Por favor completa todos los campos');
       return;
     }
 
-    // Submit
     this.loading.set(true);
 
     const contactData = {
@@ -45,18 +41,21 @@ export class Contact {
     };
 
     this.contactService.create(contactData).subscribe({
-      next: () => {
+      next: (response) => {
+        this.radicateNumber.set(response.radicateNumber);
         this.success.set(true);
         this.resetForm();
         this.loading.set(false);
-        
-        // Auto-hide success message after 5 seconds
-        setTimeout(() => this.success.set(false), 5000);
+
+        setTimeout(() => {
+          this.success.set(false);
+          this.radicateNumber.set('');
+        }, 5000);
       },
       error: (err: any) => {
         this.error.set('Error al enviar el mensaje. Por favor intenta de nuevo.');
         this.loading.set(false);
-        console.error('Error sending message:', err);
+        console.error('Error al enviar mensaje:', err);
       }
     });
   }

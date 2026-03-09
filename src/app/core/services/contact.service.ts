@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ContactMessage, CreateContactMessage } from '../../shared/models/contact.model';
+import { ContactMessage, CreateContactMessage, CreateContactResponse } from '../../shared/models/contact.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -20,8 +20,8 @@ export class ContactService {
     return this.http.get<ContactMessage>(`${this.apiUrl}/${id}`);
   }
 
-  create(message: CreateContactMessage): Observable<ContactMessage> {
-    return this.http.post<ContactMessage>(this.apiUrl, message);
+  create(message: CreateContactMessage): Observable<CreateContactResponse> {
+    return this.http.post<CreateContactResponse>(this.apiUrl, message);
   }
 
   markAsRead(id: string): Observable<void> {

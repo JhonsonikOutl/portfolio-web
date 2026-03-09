@@ -97,6 +97,10 @@ export const routes: Routes = [
         path: 'education/edit/:id',
         loadComponent: () => import('./features/admin/admin-education/education-form/education-form').then(m => m.EducationForm)
       },
+      {
+        path: 'messages',
+        loadComponent: () => import('./features/admin/admin-messages/admin-messages').then(m => m.AdminMessages)
+      }
     ]
   },
 

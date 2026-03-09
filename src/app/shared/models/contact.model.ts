@@ -14,3 +14,7 @@ export interface CreateContactMessage {
   subject: string;
   message: string;
 }
+
+export interface CreateContactResponse {
+  radicateNumber: string;
+}
