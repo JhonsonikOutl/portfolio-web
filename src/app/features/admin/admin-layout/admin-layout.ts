@@ -1,8 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AuthResponse } from '../../../shared/models/auth.model';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -12,6 +13,8 @@ import { AuthResponse } from '../../../shared/models/auth.model';
   styleUrl: './admin-layout.css'
 })
 export class AdminLayout implements OnInit {
+  readonly themeService = inject(ThemeService);
+
   user = signal<AuthResponse | null>(null);
   showMobileMenu = signal(false);
   isAuthenticated = signal(false);
