@@ -1,26 +1,37 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContactService } from '../../../core/services/contact.service';
+import { ProfileService } from '../../../core/services/profile.service';
+import { Profile } from '../../../shared/models/profile.model';
 
 @Component({
   selector: 'app-contact',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './contact.html',
   styleUrl: './contact.css'
 })
-export class Contact {
+export class Contact implements OnInit {
+  private contactService = inject(ContactService);
+  private profileService = inject(ProfileService);
+
   name = signal('');
   email = signal('');
   subject = signal('');
   message = signal('');
   radicateNumber = signal('');
 
+  profile = this.profileService.profile;
   loading = signal(false);
   success = signal(false);
   error = signal<string | null>(null);
 
-  constructor(private contactService: ContactService) { }
+  constructor() { }
+
+  ngOnInit(): void {
+    this.profileService.loadProfile();
+  }
 
   onSubmit(): void {
     this.error.set(null);

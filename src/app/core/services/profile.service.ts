@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Profile, UpdateProfile } from '../../shared/models/profile.model';
 
@@ -9,21 +9,47 @@ import { Profile, UpdateProfile } from '../../shared/models/profile.model';
 })
 export class ProfileService {
   private apiUrl = `${environment.apiUrl}/profile`;
+  private profileSignal = signal<Profile | null>(null);
+  public profile = this.profileSignal.asReadonly();
+  public loading = signal(false);
 
   constructor(private http: HttpClient) { }
 
   /**
-   * Obtener perfil público
+   * Carga el perfil desde la API y actualiza el signal global.
    */
-  getProfile(): Observable<Profile> {
-    return this.http.get<Profile>(this.apiUrl);
+  loadProfile(): void {
+    if (this.profileSignal()) return;
+
+    this.loading.set(true);
+    this.http.get<Profile>(this.apiUrl).subscribe({
+      next: (data) => {
+        this.profileSignal.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error al cargar el perfil:', err);
+        this.loading.set(false);
+      }
+    });
   }
 
   /**
-   * Actualizar perfil (requiere autenticación)
+   * Obtener perfil público (Legacy/Manual)
+   */
+  getProfile(): Observable<Profile> {
+    return this.http.get<Profile>(this.apiUrl).pipe(
+      tap(data => this.profileSignal.set(data))
+    );
+  }
+
+  /**
+   * Actualizar perfil
    */
   updateProfile(profile: UpdateProfile): Observable<Profile> {
-    return this.http.put<Profile>(this.apiUrl, profile);
+    return this.http.put<Profile>(this.apiUrl, profile).pipe(
+      tap(updated => this.profileSignal.set(updated))
+    );
   }
 
   downloadCv(): void {

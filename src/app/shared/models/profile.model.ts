@@ -17,6 +17,7 @@ export interface SocialLinks {
   twitter?: string;
   website?: string;
   email?: string;
+  whatsapp?: string;
 }
 
 export interface UpdateProfile {
