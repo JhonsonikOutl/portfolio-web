@@ -5,15 +5,17 @@ import { Footer } from '../../src/app/shared/components/footer/footer';
 import { SessionWarningModalComponent } from './shared/components/session-warning-modal/session-warning-modal';
 import { SessionTimeoutService } from '../../src/app/core/services/sessionTimeout.service';
 import { AuthService } from './core/services/auth.service';
+import { ToastContainerComponent } from './shared/components/toast-container/toast-container';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer, SessionWarningModalComponent],
+  imports: [RouterOutlet, Header, Footer, SessionWarningModalComponent, ToastContainerComponent],
   template: `
     <div data-theme="dark">
       <app-header />
       <main class="min-h-screen">
         <router-outlet />
+        <app-toast-container />
       </main>
       <app-footer />
       <app-session-warning-modal />

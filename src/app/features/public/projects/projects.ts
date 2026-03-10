@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectService } from '../../../core/services/project.service';
 import { Project } from '../../../shared/models/project.model';
@@ -23,7 +23,7 @@ export class Projects implements OnInit {
     { id: 'api', label: 'API/Backend' }
   ];
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectService) { }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -32,7 +32,6 @@ export class Projects implements OnInit {
   loadProjects(): void {
     this.projectService.getAll().subscribe({
       next: (data) => {
-        // Ordenar por displayOrder
         const sorted = data.sort((a, b) => a.displayOrder - b.displayOrder);
         this.projects.set(sorted);
         this.filteredProjects.set(sorted);
@@ -48,12 +47,12 @@ export class Projects implements OnInit {
 
   filterByCategory(category: string): void {
     this.selectedCategory.set(category);
-    
+
     if (category === 'all') {
       this.filteredProjects.set(this.projects());
     } else {
-      const filtered = this.projects().filter(p => 
-        p.technologies.some(tech => 
+      const filtered = this.projects().filter(p =>
+        p.technologies.some(tech =>
           tech.toLowerCase().includes(category.toLowerCase())
         )
       );
@@ -72,18 +71,26 @@ export class Projects implements OnInit {
   getProjectDuration(project: Project): string {
     const start = new Date(project.startDate);
     const end = project.endDate ? new Date(project.endDate) : new Date();
-    
-    const months = (end.getFullYear() - start.getFullYear()) * 12 + 
-                   (end.getMonth() - start.getMonth());
-    
+
+    const months = (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth());
+
     if (months < 1) return '< 1 mes';
     if (months === 1) return '1 mes';
     if (months < 12) return `${months} meses`;
-    
+
     const years = Math.floor(months / 12);
     const remainingMonths = months % 12;
-    
+
     if (remainingMonths === 0) return `${years} ${years === 1 ? 'año' : 'años'}`;
     return `${years} ${years === 1 ? 'año' : 'años'} ${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
   }
+
+  visibleProjects = computed(() =>
+    this.projects().some(p => p.show)
+  );
+
+  hiddenProjects = computed(() =>
+    this.filteredProjects().filter(p => p.show)
+  );
 }

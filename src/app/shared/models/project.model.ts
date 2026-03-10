@@ -10,6 +10,7 @@ export interface Project {
   endDate?: Date | string;
   isFeatured: boolean;
   displayOrder: number;
+  show : boolean;
 }
 
 export interface CreateProject {
@@ -23,6 +24,7 @@ export interface CreateProject {
   endDate?: Date | string;
   isFeatured: boolean;
   displayOrder: number;
+  show : boolean;
 }
 
 export interface UpdateProject extends CreateProject {}

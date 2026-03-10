@@ -29,7 +29,6 @@ export class ProjectForm implements OnInit {
   }
 
   ngOnInit(): void {
-    // Detectar si es modo edición
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);
@@ -46,14 +45,10 @@ export class ProjectForm implements OnInit {
     
     this.projectService.getById(id).subscribe({
       next: (project) => {
-        // Convertir array de tecnologías a string
         const technologiesString = project.technologies.join(', ');
-        
-        // Formatear fechas para input type="date"
         const startDate = this.formatDateForInput(project.startDate);
         const endDate = project.endDate ? this.formatDateForInput(project.endDate) : '';
         
-        // Llenar formulario
         this.form.patchValue({
           title: project.title,
           description: project.description,
@@ -64,7 +59,8 @@ export class ProjectForm implements OnInit {
           startDate: startDate,
           endDate: endDate,
           isFeatured: project.isFeatured,
-          displayOrder: project.displayOrder
+          displayOrder: project.displayOrder,
+          show: project.show
         });
         
         this.loading.set(false);
@@ -95,19 +91,20 @@ export class ProjectForm implements OnInit {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      technologiesString: ['', Validators.required], // String separado por comas
+      technologiesString: ['', Validators.required],
       imageUrl: [''],
       githubUrl: [''],
       liveUrl: [''],
       startDate: ['', Validators.required],
       endDate: [''],
       isFeatured: [false],
-      displayOrder: [0, [Validators.required, Validators.min(0)]]
+      displayOrder: [0, [Validators.required, Validators.min(0)]],
+      show : [false]
     });
   }
 
   /**
-   * Guardar proyecto (crear o actualizar)
+   * Guardar proyecto
    */
   onSubmit(): void {
     if (this.form.invalid) {
@@ -118,10 +115,7 @@ export class ProjectForm implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    // Transformar datos del formulario
     const formValue = this.form.value;
-    
-    // Convertir string de tecnologías a array
     const technologies = formValue.technologiesString
       .split(',')
       .map((tech: string) => tech.trim())
@@ -137,7 +131,8 @@ export class ProjectForm implements OnInit {
       startDate: formValue.startDate,
       endDate: formValue.endDate || undefined,
       isFeatured: formValue.isFeatured,
-      displayOrder: formValue.displayOrder
+      displayOrder: formValue.displayOrder,
+      show : formValue.show
     };
 
     if (this.isEditMode() && this.projectId()) {

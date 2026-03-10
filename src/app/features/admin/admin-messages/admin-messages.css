@@ -1,0 +1,558 @@
+.messages-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.unread-badge {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 0.375rem 0.875rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   FILTROS
+   ======================================== */
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  padding: 0.625rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  border-color: #6366F1;
+  color: white;
+}
+
+/* ========================================
+   LOADING
+   ======================================== */
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366F1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+.spinner-small {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   LISTA DE MENSAJES
+   ======================================== */
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.message-item {
+  position: relative;
+  display: flex;
+  background: #1e293b;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.message-item:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  transform: translateX(4px);
+}
+
+.message-item.unread {
+  background: linear-gradient(135deg, #1e293b 0%, #1a2235 100%);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.unread-indicator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 70%;
+  background: linear-gradient(180deg, #6366F1 0%, #8B5CF6 100%);
+  border-radius: 0 4px 4px 0;
+}
+
+/* ========================================
+   CONTENIDO DEL MENSAJE
+   ======================================== */
+.message-content {
+  flex: 1;
+  padding-left: 0.5rem;
+  cursor: default;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.sender-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.message-date {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.sender-email {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.message-subject {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6366F1;
+  margin-bottom: 0.5rem;
+}
+
+.message-preview {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ========================================
+   ACCIONES
+   ======================================== */
+.message-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.btn-action {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.25rem;
+}
+
+.btn-action:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-view:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.btn-reply:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.btn-delete:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.3;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+}
+
+/* ========================================
+   MODALES
+   ======================================== */
+
+/* Modal Overlay */
+.messages-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
+  animation: fadeIn 0.2s ease;
+}
+
+.messages-modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  position: relative;
+  z-index: 1000000 !important;
+}
+
+.messages-modal-detail,
+.messages-modal-reply {
+  max-width: 700px;
+}
+
+.messages-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.messages-modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.messages-btn-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.messages-btn-close:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.messages-modal-body {
+  padding: 1.5rem;
+}
+
+.detail-field {
+  margin-bottom: 1.5rem;
+}
+
+.detail-field label {
+  display: block;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-field p {
+  color: #1e293b;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.message-full {
+  white-space: pre-wrap;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.reply-info {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.reply-info p {
+  margin: 0.5rem 0;
+  color: #1e293b;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.messages-modal-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Modal de Confirmación */
+.modal-confirm {
+  max-width: 420px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.modal-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #f59e0b;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.modal-message {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.modal-message strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .messages-container {
+    padding: 1rem;
+  }
+
+  .message-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .message-actions {
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .messages-modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-actions,
+  .messages-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

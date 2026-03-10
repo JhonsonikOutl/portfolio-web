@@ -1,0 +1,248 @@
+<div class="messages-container">
+  
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Mensajes Recibidos</h1>
+      @if (unreadCount > 0) {
+        <span class="unread-badge">{{ unreadCount }} nuevo{{ unreadCount > 1 ? 's' : '' }}</span>
+      }
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <button 
+      class="filter-btn"
+      [class.active]="activeFilter() === 'all'"
+      (click)="setFilter('all')"
+    >
+      Todos ({{ allMessages().length }})
+    </button>
+    <button 
+      class="filter-btn"
+      [class.active]="activeFilter() === 'unread'"
+      (click)="setFilter('unread')"
+    >
+      No leídos ({{ unreadCount }})
+    </button>
+    <button 
+      class="filter-btn"
+      [class.active]="activeFilter() === 'read'"
+      (click)="setFilter('read')"
+    >
+      Leídos ({{ allMessages().length - unreadCount }})
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando mensajes...</p>
+    </div>
+  }
+
+  <!-- Lista de Mensajes -->
+  @if (!loading() && filteredMessages().length > 0) {
+    <div class="messages-list">
+      
+      @for (message of filteredMessages(); track message.id) {
+        <div 
+          class="message-item"
+          [class.unread]="!message.isRead"
+        >
+          
+          @if (!message.isRead) {
+            <div class="unread-indicator"></div>
+          }
+
+          <!-- Contenido SIN ningún (click) -->
+          <div class="message-content">
+            <div class="message-header">
+              <h3 class="sender-name">{{ message.name }}</h3>
+              <span class="message-date">{{ formatDate(message.createdAt) }}</span>
+            </div>
+            <p class="sender-email">{{ message.email }}</p>
+            <h4 class="message-subject">{{ message.subject }}</h4>
+            <p class="message-preview">{{ getPreview(message.message) }}</p>
+          </div>
+
+          <!-- Acciones - SIN stopPropagation porque no hay click padre -->
+          <div class="message-actions">
+            <button 
+              class="btn-action btn-view"
+              (click)="viewDetails(message)"
+              title="Ver detalles"
+            >
+              👁️
+            </button>
+            <button 
+              class="btn-action btn-reply"
+              (click)="openReplyModal(message)"
+              title="Responder"
+            >
+              ↩️
+            </button>
+            <button 
+              class="btn-action btn-delete"
+              (click)="confirmDelete(message)"
+              title="Eliminar"
+            >
+              🗑️
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && filteredMessages().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">📭</div>
+      <h3>No hay mensajes</h3>
+      <p>
+        @if (activeFilter() === 'unread') {
+          No tienes mensajes sin leer
+        } @else if (activeFilter() === 'read') {
+          No tienes mensajes leídos
+        } @else {
+          Aún no has recibido mensajes
+        }
+      </p>
+    </div>
+  }
+
+</div>
+
+<!-- Modal de Detalles -->
+@if (showDetailModal() && selectedMessage()) {
+  <div class="messages-modal-overlay" (click)="closeDetailModal()">
+    <div class="messages-modal-content messages-modal-detail" (click)="$event.stopPropagation()">
+      
+      <div class="messages-modal-header">
+        <h2>Detalles del Mensaje</h2>
+        <button class="messages-btn-close" (click)="closeDetailModal()">✕</button>
+      </div>
+
+      <div class="messages-modal-body">
+        <div class="detail-field">
+          <label>De:</label>
+          <p>{{ selectedMessage()!.name }}</p>
+        </div>
+        <div class="detail-field">
+          <label>Email:</label>
+          <p>{{ selectedMessage()!.email }}</p>
+        </div>
+        <div class="detail-field">
+          <label>Asunto:</label>
+          <p>{{ selectedMessage()!.subject }}</p>
+        </div>
+        <div class="detail-field">
+          <label>Fecha:</label>
+          <p>{{ formatDate(selectedMessage()!.createdAt) }}</p>
+        </div>
+        <div class="detail-field">
+          <label>Mensaje:</label>
+          <p class="message-full">{{ selectedMessage()!.message }}</p>
+        </div>
+      </div>
+
+      <div class="messages-modal-footer">
+        <button class="btn btn-secondary" (click)="closeDetailModal()">
+          Cerrar
+        </button>
+        <button class="btn btn-primary" (click)="openReplyModal(selectedMessage()!)">
+          Responder
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- Modal de Respuesta -->
+@if (showReplyModal() && selectedMessage()) {
+  <div class="messages-modal-overlay" (click)="closeReplyModal()">
+    <div class="messages-modal-content messages-modal-reply" (click)="$event.stopPropagation()">
+      
+      <div class="messages-modal-header">
+        <h2>Responder a {{ selectedMessage()!.name }}</h2>
+        <button class="messages-btn-close" (click)="closeReplyModal()">✕</button>
+      </div>
+
+      <div class="messages-modal-body">
+        <div class="reply-info">
+          <p><strong>Para:</strong> {{ selectedMessage()!.email }}</p>
+          <p><strong>Asunto:</strong> Re: {{ selectedMessage()!.subject }}</p>
+        </div>
+
+        <div class="form-group">
+          <label for="replyBody">Tu Respuesta:</label>
+          <textarea 
+            id="replyBody"
+            class="form-control"
+            rows="8"
+            placeholder="Escribe tu respuesta aquí..."
+            [value]="replyBody()"
+            (input)="replyBody.set($any($event.target).value)"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="messages-modal-footer">
+        <button 
+          class="btn btn-secondary" 
+          (click)="closeReplyModal()"
+          [disabled]="sendingReply()"
+        >
+          Cancelar
+        </button>
+        <button 
+          class="btn btn-primary" 
+          (click)="sendReply()"
+          [disabled]="sendingReply() || replyBody().trim() === ''"
+        >
+          @if (sendingReply()) {
+            <span class="spinner-small"></span>
+            Enviando...
+          } @else {
+            Enviar Respuesta
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<!-- Modal de Confirmación Eliminar -->
+@if (showDeleteModal() && messageToDelete()) {
+  <div class="messages-modal-overlay" (click)="cancelDelete()">
+    <div class="messages-modal-content modal-confirm" (click)="$event.stopPropagation()">
+      
+      <div class="modal-icon">⚠️</div>
+      
+      <h2 class="modal-title">Eliminar Mensaje</h2>
+      
+      <p class="modal-message">
+        ¿Estás seguro de eliminar el mensaje de 
+        <strong>{{ messageToDelete()!.name }}</strong>? 
+        Esta acción no se puede deshacer.
+      </p>
+      
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="cancelDelete()">
+          Cancelar
+        </button>
+        <button class="btn btn-danger" (click)="deleteMessage()">
+          Eliminar
+        </button>
+      </div>
+      
+    </div>
+  </div>
+}
