@@ -1,8 +1,15 @@
-<!-- Solo mostrar header en rutas públicas -->
 @if (!isAdminRoute) {
   <nav class="navbar">
     <div class="container">
+
       <a routerLink="/" class="navbar-brand" (click)="closeMenu()">
+        <span class="brand-avatar" [class.visible]="!isHomePage()">
+          @if (avatarUrl()) {
+            <img [src]="avatarUrl()!" alt="Jonathan Aldana" class="brand-avatar-img" />
+          } @else {
+            <span class="brand-avatar-fallback">JA</span>
+          }
+        </span>
         <span style="color: var(--primary)">&lt;</span>
         <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">JA</span>
         <span style="color: var(--primary)">/&gt;</span>
@@ -11,13 +18,13 @@
           <span style="font-size: 0.7rem; opacity: 0.6;">Full Stack Developer</span>
         </div>
       </a>
-      
+
       <button class="menu-toggle" (click)="toggleMenu()" [class.active]="mobileMenuOpen">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      
+
       <div class="menu-overlay" [class.active]="mobileMenuOpen" (click)="closeMenu()"></div>
 
       <ul class="navbar-menu" [class.open]="mobileMenuOpen">
@@ -27,8 +34,17 @@
         <li><a routerLink="/experience" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Experiencia</a></li>
         <li><a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Proyectos</a></li>
         <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMenu()" class="navbar-link">Contacto</a></li>
-        
-        <!-- Botón Dashboard (solo si está autenticado) -->
+
+        <li>
+          <button
+            class="btn-theme-toggle"
+            (click)="themeService.toggleTheme()"
+            [title]="themeService.isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+            [attr.aria-label]="themeService.isDark() ? 'Activar tema claro' : 'Activar tema oscuro'">
+            {{ themeService.isDark() ? '☀️' : '🌙' }}
+          </button>
+        </li>
+
         @if (isAuthenticated()) {
           <li>
             <a routerLink="/admin/dashboard" (click)="closeMenu()" class="btn-admin btn-dashboard" title="Dashboard">
@@ -36,8 +52,7 @@
             </a>
           </li>
         }
-        
-        <!-- Botón Login/Logout Dinámico -->
+
         @if (!isAuthenticated()) {
           <li>
             <a routerLink="/admin/login" (click)="closeMenu()" class="btn-admin btn-login" title="Acceso Admin">
@@ -45,7 +60,7 @@
             </a>
           </li>
         }
-        
+
         @if (isAuthenticated()) {
           <li>
             <button class="btn-admin btn-logout" (click)="logout()" title="Cerrar Sesión">
@@ -54,6 +69,7 @@
           </li>
         }
       </ul>
+
     </div>
   </nav>
 }

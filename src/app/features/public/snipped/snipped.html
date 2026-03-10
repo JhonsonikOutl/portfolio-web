@@ -1,0 +1,7 @@
+<button
+  class="btn-theme-toggle"
+  (click)="themeService.toggleTheme()"
+  [title]="themeService.isDark() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+  [attr.aria-label]="themeService.isDark() ? 'Activar tema claro' : 'Activar tema oscuro'">
+  {{ themeService.isDark() ? '☀️' : '🌙' }}
+</button>

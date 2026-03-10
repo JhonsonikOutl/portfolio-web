@@ -11,7 +11,7 @@ import { ToastContainerComponent } from './shared/components/toast-container/toa
   selector: 'app-root',
   imports: [RouterOutlet, Header, Footer, SessionWarningModalComponent, ToastContainerComponent],
   template: `
-    <div data-theme="dark">
+    <div>
       <app-header />
       <main class="min-h-screen">
         <router-outlet />
@@ -24,18 +24,16 @@ import { ToastContainerComponent } from './shared/components/toast-container/toa
 })
 export class App implements OnInit {
   title = 'portfolio-web';
-  
+
   private sessionTimeoutService = inject(SessionTimeoutService);
   private authService = inject(AuthService);
 
   ngOnInit(): void {
-    // Verificar si el usuario está autenticado al iniciar
     if (this.authService.isAuthenticated()) {
       console.log('✅ Usuario autenticado, iniciando monitoreo de sesión');
       this.sessionTimeoutService.startMonitoring();
     }
 
-    // Suscribirse a cambios de autenticación
     this.authService.isAuthenticated$.subscribe(isAuth => {
       if (isAuth) {
         console.log('✅ Login detectado, iniciando monitoreo de sesión');

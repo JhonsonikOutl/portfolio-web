@@ -1,5 +1,5 @@
 /* ============================================================
-   HOME.CSS - Estilos específicos de la página Home
+   PROFILE-HERO.CSS
    ============================================================ */
 
 .hero {
@@ -35,28 +35,6 @@
   display: inline-block;
 }
 
-.avatar-fallback {
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 5px solid var(--primary);
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
-  position: relative;
-  z-index: 1;
-}
-
-.avatar-ring {
-  position: absolute;
-  top: -20px; left: -20px; right: -20px; bottom: -20px;
-  border: 2px solid var(--primary);
-  border-radius: 50%;
-  animation: pulse-ring 3s infinite;
-}
-
 .avatar {
   width: 280px;
   height: 280px;
@@ -72,17 +50,23 @@
 
 .avatar:hover { transform: scale(1.01); }
 
+.avatar-ring {
+  position: absolute;
+  top: -20px; left: -20px; right: -20px; bottom: -20px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: pulse-ring 3s infinite;
+}
+
 .pulse-dot {
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   background: var(--success);
   border-radius: 50%;
   animation: blink 2s infinite;
 }
 
 .pulse-dot-unavailable {
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   background: #ef4444;
   border-radius: 50%;
   animation: pulse-red 2s infinite;
@@ -140,10 +124,7 @@
   max-width: 700px;
 }
 
-.info-card {
-  text-align: center;
-  padding: 1rem;
-}
+.info-card { text-align: center; padding: 1rem; }
 
 .info-icon {
   color: var(--primary);
@@ -184,8 +165,7 @@
 .social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
 
 .social-btn {
-  width: 50px;
-  height: 50px;
+  width: 50px; height: 50px;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -204,62 +184,6 @@
 .social-btn.whatsapp  { background: #25d366; color: white; }
 .social-btn.email     { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
 .social-btn.email svg { stroke: white; }
-
-.cta-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-.tech-stack-section {
-  padding: 4rem 0;
-  background: var(--gradient-section);
-  transition: background 0.3s ease;
-}
-
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.tech-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem 1rem;
-  background: var(--bg-overlay);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.tech-card:hover {
-  transform: translateY(-8px);
-  background: var(--bg-overlay-3);
-  border-color: var(--primary);
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-}
-
-.tech-icon-svg {
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-}
-
-.tech-icon-svg img { width: 100%; height: 100%; object-fit: contain; }
-.tech-card:hover .tech-icon-svg { transform: scale(1.15) rotate(-5deg); }
-
-.tech-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--text-primary);
-  text-align: center;
-}
 
 @keyframes pulse-ring {
   0%, 100% { transform: scale(1);     opacity: 0.5; }
@@ -282,7 +206,7 @@
   .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
   .hero-image { order: -1; }
   .hero-content { text-align: center; }
-  .greeting, .social-links, .cta-buttons { justify-content: center; }
+  .greeting, .social-links { justify-content: center; }
   .info-grid { max-width: 100%; }
 }
 
@@ -290,17 +214,51 @@
   .hero { padding: 2rem 0; }
   .hero-grid { gap: 2rem; }
   .info-grid { grid-template-columns: 1fr; }
-  .cta-buttons { flex-direction: column; }
-  .cta-buttons .btn { width: 100%; }
-  .avatar, .avatar-fallback { width: 200px; height: 200px; }
-  .tech-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .tech-card { padding: 1rem 0.5rem; }
-  .tech-icon-svg { width: 50px; height: 50px; }
-  .tech-name { font-size: 0.75rem; }
+  .avatar { width: 200px; height: 200px; }
 }
 
-@media (max-width: 576px) {
-  .tech-grid { grid-template-columns: repeat(2, 1fr); }
-  .tech-icon-svg { width: 55px; height: 55px; }
-  .tech-name { font-size: 0.85rem; }
+/* ============================================================
+   Modo About — layout vertical centrado
+   ============================================================ */
+
+.hero--about {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  gap: 1.25rem;
+}
+
+.about-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  animation: slideFromLeft 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.about-avatar-wrapper .avatar {
+  width: 280px;
+  height: 280px;
+}
+
+.about-hero .hero-title  { margin-bottom: 0; }
+.about-hero .hero-subtitle { margin-bottom: 0; }
+.about-hero .hero-bio { margin-bottom: 0.5rem; max-width: 600px; text-align: center; }
+
+@keyframes slideFromLeft {
+  from { opacity: 0; transform: translateX(-80px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+  .about-avatar-wrapper .avatar { width: 200px; height: 200px; }
 }

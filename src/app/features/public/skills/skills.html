@@ -1,12 +1,10 @@
 <section class="skills-section">
   
-  <!-- Header -->
   <div class="section-header">
     <h1>Habilidades Técnicas</h1>
     <p class="section-subtitle">Tecnologías y herramientas que domino</p>
   </div>
 
-  <!-- Loading State -->
   @if (loading()) {
     <div class="loading-state">
       <div class="spinner"></div>
@@ -14,45 +12,39 @@
     </div>
   }
 
-  <!-- Skills por Categoría -->
   @if (!loading() && skills().length > 0) {
     <div class="categories-container">
       
       @for (category of getCategories(); track category) {
         <div class="category-block">
           
-          <!-- Category Title -->
           <h2 class="category-title">{{ category }}</h2>
           
-          <!-- Skills List -->
           <div class="skills-list">
             @for (skill of getSkillsByCategory(category); track skill.id) {
               <div class="skill-item">
                 
-                <!-- Skill Header -->
-                <div class="skill-header">
-                  <div class="skill-icon-wrapper" [class.no-icon]="!hasIcon(skill.icon)">
-                    @if (hasIcon(skill.icon)) {
-                      <i [class]="skill.icon" class="skill-icon"></i>
-                    } @else {
-                      <span class="skill-initials">{{ getInitials(skill.name) }}</span>
-                    }
-                  </div>
+                <div class="skill-icon-wrapper" [class.no-icon]="!hasIcon(skill.icon)">
+                  @if (hasIcon(skill.icon)) {
+                    <i [class]="skill.icon" class="skill-icon"></i>
+                  } @else {
+                    <span class="skill-initials">{{ getInitials(skill.name) }}</span>
+                  }
+                </div>
+
+                <div class="skill-info-block">
                   <h3 class="skill-name">{{ skill.name }}</h3>
+                  <div class="progress-container">
+                    <div class="progress-bar">
+                      <div 
+                        class="progress-fill" 
+                        [style.width.%]="skill.level"
+                      ></div>
+                    </div>
+                  </div>
                   <span class="skill-percentage">{{ skill.level }}%</span>
                 </div>
-                
-                <!-- Progress Bar -->
-                <div class="progress-container">
-                  <div class="progress-bar">
-                    <div 
-                      class="progress-fill" 
-                      [style.width.%]="skill.level"
-                      [attr.data-level]="skill.level"
-                    ></div>
-                  </div>
-                </div>
-                
+
               </div>
             }
           </div>
@@ -63,7 +55,6 @@
     </div>
   }
 
-  <!-- Empty State -->
   @if (!loading() && skills().length === 0) {
     <div class="empty-state">
       <div class="empty-icon">🎯</div>
