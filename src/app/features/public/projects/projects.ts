@@ -40,7 +40,7 @@ export class Projects implements OnInit {
       error: (err) => {
         this.error.set('Error al cargar los proyectos');
         this.loading.set(false);
-        console.error('Error loading projects:', err);
+        console.error('Error al cargar proyectos:', err);
       }
     });
   }
@@ -86,11 +86,28 @@ export class Projects implements OnInit {
     return `${years} ${years === 1 ? 'año' : 'años'} ${remainingMonths} ${remainingMonths === 1 ? 'mes' : 'meses'}`;
   }
 
-  visibleProjects = computed(() =>
-    this.projects().some(p => p.show)
+  hasVisibleProjects = computed(() =>
+    this.filteredProjects().some(p => p.show)
   );
 
-  hiddenProjects = computed(() =>
+  visibleProjects = computed(() =>
     this.filteredProjects().filter(p => p.show)
   );
+
+  onImageLoad(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    const aspectRatio = img.naturalWidth / img.naturalHeight;
+    
+    if (aspectRatio > 1.5) {
+      img.style.objectFit = 'cover';
+    } else {
+      img.style.objectFit = 'contain';
+    }
+  }
+  
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+    console.error('Error al cargar imagen del proyecto');
+  }
 }
